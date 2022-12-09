@@ -139,10 +139,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Background
       objectReference: {fileID: 0}
-    - target: {fileID: 3166374976119019402, guid: c22fbc5544a84244596356f0baf67336, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a833996e65ab1ab41b94241dd33225f8, type: 2}
     - target: {fileID: 8169621467035621033, guid: c22fbc5544a84244596356f0baf67336, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -199,10 +195,6 @@ PrefabInstance:
     - target: {fileID: 4254140016993578537, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_Name
       value: Main Camera
-      objectReference: {fileID: 0}
-    - target: {fileID: 4254140016993578537, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_RootOrder
@@ -318,10 +310,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Directional Light
       objectReference: {fileID: 0}
-    - target: {fileID: 5531371109154568508, guid: c8495748cfa5f0343873dcceb4290804, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
     - target: {fileID: 5531371109154568510, guid: c8495748cfa5f0343873dcceb4290804, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -366,18 +354,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -75
       objectReference: {fileID: 0}
-    - target: {fileID: 5531371109154568511, guid: c8495748cfa5f0343873dcceb4290804, type: 3}
-      propertyPath: m_Color.b
-      value: 0.8066038
-      objectReference: {fileID: 0}
-    - target: {fileID: 5531371109154568511, guid: c8495748cfa5f0343873dcceb4290804, type: 3}
-      propertyPath: m_Color.g
-      value: 0.86632395
-      objectReference: {fileID: 0}
-    - target: {fileID: 5531371109154568511, guid: c8495748cfa5f0343873dcceb4290804, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8495748cfa5f0343873dcceb4290804, type: 3}
 --- !u!1001 &5833286163675386189
@@ -391,10 +367,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ground
       objectReference: {fileID: 0}
-    - target: {fileID: 5833286164465098557, guid: 3436a229e0febac4fb0632c706a830d0, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 594dc1a0acd65604798d8cecfbd61029, type: 2}
     - target: {fileID: 5833286164465098559, guid: 3436a229e0febac4fb0632c706a830d0, type: 3}
       propertyPath: m_RootOrder
       value: 2
