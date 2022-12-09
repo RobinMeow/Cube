@@ -6,3 +6,4 @@
 - use light rotation to create fancy d'nnight cycle.
     - or also make it super fast, while in slow motion, to create contrast ppo
 - on play start, give the players a set amount of time, to position themselves on the map before firering is allowed 
+- enable Jump Downwards 
