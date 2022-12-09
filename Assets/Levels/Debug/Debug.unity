@@ -271,7 +271,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8169621467035621033, guid: c22fbc5544a84244596356f0baf67336, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8169621467035621033, guid: c22fbc5544a84244596356f0baf67336, type: 3}
       propertyPath: m_LocalPosition.x
@@ -337,11 +337,15 @@ PrefabInstance:
       objectReference: {fileID: 8256533900086819684}
     - target: {fileID: 184757553702838798, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_Name
-      value: CubeShooter
+      value: CubeShooterOrange
       objectReference: {fileID: 0}
     - target: {fileID: 252446041894613867, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 252446041894613867, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 252446041894613867, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -402,6 +406,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5833286164465098559, guid: 3436a229e0febac4fb0632c706a830d0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5833286164465098559, guid: 3436a229e0febac4fb0632c706a830d0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -424,7 +432,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1502040385752593728, guid: 163d3262b3b2fd540af6c5ae9a20b5c5, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1502040385752593728, guid: 163d3262b3b2fd540af6c5ae9a20b5c5, type: 3}
       propertyPath: m_LocalScale.x
