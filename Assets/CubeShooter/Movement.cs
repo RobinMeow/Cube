@@ -5,13 +5,13 @@ public sealed class Movement : MonoBehaviour
 {
     [SerializeField] UserInputs _userInputs = null;
     [SerializeField] Rigidbody _rigidbody = null;
-    [SerializeField] float _jumpStrength = 600.0f;
-    [SerializeField] float _floatStrength = 200.0f;
+    [SerializeField] CubeShooterStats _stats = null;
 
     void Awake()
     {
         Assert.IsNotNull(_userInputs, $"{nameof(Movement)} requires {nameof(UserInputs)}.");
         Assert.IsNotNull(_rigidbody, $"{nameof(Movement)} requires {nameof(Rigidbody)}.");
+        Assert.IsNotNull(_stats, $"{nameof(Movement)} requires {nameof(CubeShooterStats)}.");
     }
 
     void FixedUpdate()
@@ -21,12 +21,12 @@ public sealed class Movement : MonoBehaviour
 
         if (direction != 0.0f)
         {
-            movementForce.x = _floatStrength * direction;
+            movementForce.x = _stats.FloatStrength * direction;
         }
 
         if (_userInputs.JumpWasPressed)
         {
-            movementForce.y = _jumpStrength;
+            movementForce.y = _stats.JumpStrength;
         }
 
         _rigidbody.AddForce(movementForce, ForceMode.Force);

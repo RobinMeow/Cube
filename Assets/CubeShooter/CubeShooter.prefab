@@ -50,8 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _userInputs: {fileID: 0}
   _rigidbody: {fileID: 671348674}
-  _jumpStrength: 600
-  _floatStrength: 300
+  _stats: {fileID: 11400000, guid: fe3ff51cad1f92a42b43480e5c21244d, type: 2}
 --- !u!33 &7864704049301246545
 MeshFilter:
   m_ObjectHideFlags: 0
