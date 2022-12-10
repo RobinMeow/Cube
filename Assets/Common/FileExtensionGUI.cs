@@ -25,6 +25,7 @@ public sealed class FileExtensionGUI
         { ".asmdef", new Color32(75, 135, 171, 199) }, // asmdef icon blue
         { ".physicsMaterial2D", new Color32(177, 253, 89, 199) },
         { ".physicsMaterial", new Color32(177, 253, 89, 199) },
+        { ".wav", new Color32(252,191,7, 199) },
         // ToDo: add more extensionc colors 
         // Unity DarkPurple: new Color32(97, 51, 238, 199);
         // Unity Green: new Color32(20, 211, 104, 199);
