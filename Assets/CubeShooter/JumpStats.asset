@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86e80158d631fae42a537aad3bca275b, type: 3}
   m_Name: JumpStats
   m_EditorClassIdentifier: 
-  _initialStrength: 2000
-  _accumulatingStrength: 500
+  _initialStrength: 8000
+  _accumulatingStrength: 2000
   _accumulationStepInSeconds: 0.1
   _maxAccumulationDurationInSeconds: 1
