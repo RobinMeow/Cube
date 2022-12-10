@@ -12,3 +12,4 @@
         - best of 3 
         - Jeder gegen jeden, death count (less points on repeated kill, but more points on kill against killer) 
         - Sudden Death 
+- Falling down doesnt kill, but respawn at a specified location. On button press you can leave a visible mark where to respawn. 
