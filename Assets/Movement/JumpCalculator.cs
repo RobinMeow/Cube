@@ -40,21 +40,14 @@ public sealed class JumpCalculator
     {
         float calculatedStrength = 0.0f;
         
-        //bool StartedPressing() => _userInputs.JumpIsPressed && !_userInputs.JumpWasPressedPreviousFixedUpdate;
-        
         bool IsReleased() => !_userInputs.JumpIsPressed && _userInputs.JumpWasPressedPreviousFixedUpdate;
 
         if (IsHolding() && !_isJumping) 
         {
             _holdingTime.Tick(Time.deltaTime);
             _holdJumpPercentage.text = (_holdingTime.CompletedFactor * 100.0f).ToString("00") + " %";
-            _logger.Log($"{nameof(IsHolding)} calcedStrength: {calculatedStrength}");
-            
-            if (_rigidbody.useGravity)
-            {
-                _rigidbody.useGravity = false;
-                _rigidbody.velocity = Vector3.zero;
-            }
+
+            DisableGravity();
         }
         else if (IsReleased() && !_isJumping) 
         {
@@ -63,19 +56,29 @@ public sealed class JumpCalculator
             _holdingTime.ResetTime();
             _logger.Log($"{nameof(IsReleased)} calcedStrength: {calculatedStrength}");
             _isJumping = true;
-            //JumpStarted = true;
         }
         else
         {
             // leave default: Zero 
             _isJumping = false;
-            if (!_rigidbody.useGravity)
-                _rigidbody.useGravity = true;
+            EnableGravity();
 
             _holdJumpPercentage.text = String.Empty;
         }
 
         return calculatedStrength;
+    }
+
+    void EnableGravity()
+    {
+        if (!_rigidbody.useGravity)
+            _rigidbody.useGravity = true;
+    }
+
+    void DisableGravity()
+    {
+        _rigidbody.useGravity = false;
+        _rigidbody.velocity = Vector3.zero;
     }
 
     private float CalculateAdditionalStrength(float maximum)
