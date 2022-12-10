@@ -295,13 +295,13 @@ MonoBehaviour:
     CooldownDuration: 0
     NumberOfRepeats: 0
     RepeatForever: 0
-    DelayBetweenRepeats: 1
+    DelayBetweenRepeats: 0.4
   DebugActive: 0
   Sfx: {fileID: 8300000, guid: 5b3e6648d82f80841ab142c119502d90, type: 3}
   RandomSfx: []
   PlayMethod: 1
-  MinVolume: 1
-  MaxVolume: 1
+  MinVolume: 0.5
+  MaxVolume: 0.5
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}

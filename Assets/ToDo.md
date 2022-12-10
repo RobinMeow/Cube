@@ -7,3 +7,8 @@
     - or also make it super fast, while in slow motion, to create contrast ppo
 - on play start, give the players a set amount of time, to position themselves on the map before firering is allowed 
 - enable Jump Downwards 
+- Score system 
+    - Multiple modis
+        - best of 3 
+        - Jeder gegen jeden, death count (less points on repeated kill, but more points on kill against killer) 
+        - Sudden Death 
