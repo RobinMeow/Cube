@@ -19,7 +19,7 @@ public sealed class FileExtensionGUI
     static Color32 _textColor = new Color32(255, 147, 64, 199);
 
     static readonly Dictionary<string, Color32> _extensionColors = new Dictionary<string, Color32>{
-        { ".cs", new Color32(67, 255, 46, 199) },
+        { ".cs", new Color32(67, 255, 46, 199) }, 
         { ".prefab", new Color32(127, 214, 253, 199) }, // Unitys light blue 
         { ".asset", new Color32(246, 108, 64, 199) }, // Unitys orange 
         { ".asmdef", new Color32(75, 135, 171, 199) }, // asmdef icon blue
@@ -56,11 +56,11 @@ public sealed class FileExtensionGUI
         return !String.IsNullOrEmpty(assetGuid) && assetGuid.Length == EMPTY_ASSET_GUID.Length;
     }
 
-    static void HandleOnGUI(string guid, Rect selectionRect)
+    static void HandleOnGUI(string guid, Rect selectionRect) 
     {
         if (guid == _previousGuid)
             return;
-
+        
         _previousGuid = guid;
 
         if (!IsValidAssetGuid(guid))
@@ -80,9 +80,9 @@ public sealed class FileExtensionGUI
         if (0 >= path.Length)
             return;
 
-        if (!Path.HasExtension(path))
+        if (!Path.HasExtension(path)) 
             return;
-
+        
         string fileName = Path.GetFileNameWithoutExtension(path);
 
         string[] directories = fileName.Split(Path.DirectorySeparatorChar);
@@ -101,8 +101,8 @@ public sealed class FileExtensionGUI
         if (extensionHasOwnColor && selected)
             extensionColor = new Color32(extensionColor.r, extensionColor.g, extensionColor.b, 255);
 
-        _labelStyles.normal.textColor = extensionHasOwnColor
-            ? extensionColor
+        _labelStyles.normal.textColor = extensionHasOwnColor 
+            ? extensionColor 
             : GetFallBackTextColor(selected);
 
         GUIContent fileExtensionContent = new GUIContent(extension);
@@ -112,7 +112,7 @@ public sealed class FileExtensionGUI
         selectionRect.width = fileNameSize.x + extensionSize.x;
 
         Rect offsetRect = new Rect(selectionRect.position, selectionRect.size);
-
+        
         offsetRect.x += 1.5f; // pixels between filename and extension
         offsetRect.y -= 1.0f; // display correction, so extension is even (lineHeight) with filename 
 
@@ -137,7 +137,7 @@ public sealed class FileExtensionGUI
             .GetType()
             .GetProperty("listAreaGridSize", BindingFlags.Instance | BindingFlags.Public)
             .GetValue(projectWindow, null);
-
+        
         return (float)gridSize > 16f;
     }
 
