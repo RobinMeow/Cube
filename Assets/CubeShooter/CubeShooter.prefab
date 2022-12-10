@@ -54,9 +54,10 @@ MonoBehaviour:
   _userInputs: {fileID: 0}
   _rigidbody: {fileID: 671348674}
   _stats: {fileID: 11400000, guid: fe3ff51cad1f92a42b43480e5c21244d, type: 2}
+  _jumpStats: {fileID: 11400000, guid: af35fd1e4d0c98a4aa47316a33be2df1, type: 2}
   _boxCollider: {fileID: 8731177236709520833}
-  _groundDropFeedbacks: {fileID: 7178754013220677573}
   _groundCastDistance: 0.05
+  _groundDropFeedbacks: {fileID: 7178754013220677573}
 --- !u!33 &7864704049301246545
 MeshFilter:
   m_ObjectHideFlags: 0

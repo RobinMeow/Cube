@@ -7,26 +7,33 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] UserInputs _userInputs = null;
     [SerializeField] Rigidbody _rigidbody = null;
     [SerializeField] CubeShooterStats _stats = null;
+    [SerializeField] JumpStats _jumpStats = null;
     [SerializeField] BoxCollider _boxCollider = null;
+
+    [Header("Ground cast check")]
+    [SerializeField] float _groundCastDistance = 0.0125f;
+    RaycastHit _groundHit = new RaycastHit();
+    bool _hadGroundHitPreviousFrame = false;
+    bool _hasGroundHit = false;
 
     [Header("Feedbacks")]
     [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
     //[SerializeField] MMFeedback _jumpFeedback = null;
     //[SerializeField] MMFeedback _chargedJumpFeedback = null;
 
-    [Header("Ground cast check")]
-    [SerializeField] RaycastHit _groundHit = new RaycastHit();
-    bool _hadGroundHitPreviousFrame = false;
-    bool _hasGroundHit = false;
-    [SerializeField] float _groundCastDistance = 0.0125f;
+    // Movement 
+    JumpCalculator _jumpCalculator = null;
 
     void Awake()
     {
         Assert.IsNotNull(_userInputs, $"{nameof(Movement)} requires {nameof(_userInputs)}.");
         Assert.IsNotNull(_rigidbody, $"{nameof(Movement)} requires {nameof(_rigidbody)}.");
         Assert.IsNotNull(_stats, $"{nameof(Movement)} requires {nameof(_stats)}.");
+        Assert.IsNotNull(_jumpStats, $"{nameof(Movement)} requires {nameof(_jumpStats)}.");
         Assert.IsNotNull(_boxCollider, $"{nameof(Movement)} requires {nameof(_boxCollider)}.");
         Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
+
+        _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats);
     }
 
     void FixedUpdate()
@@ -46,10 +53,7 @@ public sealed class Movement : MonoBehaviour
             movementForce.x = _stats.FloatStrength * direction;
         }
 
-        if (_userInputs.JumpWasPressed)
-        {
-            movementForce.y = _stats.JumpStrength;
-        }
+        movementForce.y = _jumpCalculator.Calculate();
 
         _rigidbody.AddForce(movementForce, ForceMode.Force);
 

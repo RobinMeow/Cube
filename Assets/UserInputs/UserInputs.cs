@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,12 +7,26 @@ public sealed class UserInputs : MonoBehaviour
 {
     DeviceInputs _deviceInputs;
 
-    public bool JumpWasPressed { get; private set; }
+    public bool JumpIsPressed { get; private set; }
+    public bool JumpWasPressedPreviousFixedUpdate { get; private set; }
     public Vector3 MoveDirection { get; private set; }
 
     void Awake()
     {
         _deviceInputs = new DeviceInputs();
+    }
+
+    void Start()
+    {
+        StartCoroutine(LateFixedUpdate());
+        IEnumerator LateFixedUpdate()
+        {
+            while (true)
+            {
+                yield return new WaitForFixedUpdate();
+                JumpWasPressedPreviousFixedUpdate = JumpIsPressed;
+            }
+        }
     }
 
     void OnEnable()
@@ -31,7 +46,7 @@ public sealed class UserInputs : MonoBehaviour
 
     void OnJump(InputAction.CallbackContext context)
     {
-        JumpWasPressed = context.started;
+        JumpIsPressed = context.started;
     }
 
     void OnDisable()
