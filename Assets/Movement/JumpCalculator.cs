@@ -9,7 +9,8 @@ public sealed class JumpCalculator
     readonly JumpStats _stats = null;
     readonly Rigidbody _rigidbody;
     readonly GameTimer _holdingTime = null;
-    readonly GameLogger _logger = null;
+    static GameLogger _loggerInstance = new GameLogger("JumpCalculator");
+    static GameLogger _logger => _loggerInstance;
     bool _isJumping = false;
 
     public bool IsJumping { get => _isJumping; }
@@ -25,8 +26,6 @@ public sealed class JumpCalculator
         _stats = stats;
         _rigidbody = rigidbody;
         _holdingTime = new GameTimer(_stats.MaxAccumulationDurationInSeconds);
-
-        _logger = new GameLogger("JumpCalculator");
     }
 
     /// <summary>
