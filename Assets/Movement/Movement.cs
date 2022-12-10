@@ -17,10 +17,11 @@ public sealed class Movement : MonoBehaviour
     bool _hasGroundHit = false;
 
     [Header("Feedbacks")]
-    [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
     [SerializeField] MMFeedbacks _jumpFeedbacks = null;
-    [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.5f;
+    [SerializeField] MMFeedbacks _holdJumpFeedbacks = null;
     [SerializeField] MMFeedbacks _chargedJumpFeedbacks = null;
+    [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
+    [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.5f;
 
     // Movement 
     JumpCalculator _jumpCalculator = null;
@@ -33,9 +34,10 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_jumpStats, $"{nameof(Movement)} requires {nameof(_jumpStats)}.");
         Assert.IsNotNull(_boxCollider, $"{nameof(Movement)} requires {nameof(_boxCollider)}.");
 
-        //Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
-        //Assert.IsNotNull(_jumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
-        //Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
+        Assert.IsNotNull(_jumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
+        Assert.IsNotNull(_holdJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
+        Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
+        Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
 
         _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats, _rigidbody);
     }
@@ -46,11 +48,7 @@ public sealed class Movement : MonoBehaviour
         
         if (_hasGroundHit && !_hadGroundHitPreviousFrame)
         {
-            _groundDropFeedbacks?.PlayFeedbacks();
-#if UNITY_EDITOR
-            if (_groundDropFeedbacks == null)
-                this.LogWarning($"no {nameof(_groundDropFeedbacks)} set");
-#endif
+            _groundDropFeedbacks.PlayFeedbacks();
         }
 
         Vector3 movementForce = Vector3.zero;
@@ -66,18 +64,13 @@ public sealed class Movement : MonoBehaviour
 
         if (_jumpCalculator.IsJumping)
         {
-            _jumpFeedbacks?.PlayFeedbacks();
-#if UNITY_EDITOR
-            if (_jumpFeedbacks == null)
-                this.LogWarning($"no {nameof(_jumpFeedbacks)} set");
-#endif
             if (_jumpCalculator.ThresholdReached(_chargedJumpFeedbackThresholdFactor, calculatedJumpStrength))
             {
-                _chargedJumpFeedbacks?.PlayFeedbacks();
-#if UNITY_EDITOR
-                if (_chargedJumpFeedbacks == null)
-                    this.LogWarning($"no {nameof(_chargedJumpFeedbacks)} set");
-#endif
+                _chargedJumpFeedbacks.PlayFeedbacks();
+            }
+            else
+            {
+                _jumpFeedbacks.PlayFeedbacks();
             }
         }
 
