@@ -58,6 +58,8 @@ MonoBehaviour:
   _boxCollider: {fileID: 8731177236709520833}
   _useShadowedMovement: 0
   _meshRenderer: {fileID: 7266501342973388228}
+  _holdJumpPercentageRectTransform: {fileID: 4724173151374045976}
+  _textPositionOffset: {x: 1.488, y: -0.3, z: -0.56}
   _groundCastDistance: 0.05
   _jumpFeedbacks: {fileID: 712709547479694469}
   _holdJumpPercentage: {fileID: 4319382196933475820}
@@ -635,7 +637,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100 &
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

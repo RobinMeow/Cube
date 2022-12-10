@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: JumpStats
   m_EditorClassIdentifier: 
   _initialStrength: 8000
-  _accumulatingStrength: 2000
-  _accumulationStepInSeconds: 0.1
-  _maxAccumulationDurationInSeconds: 1
+  _accumulatingStrength: 12500
+  _accumulationStepInSeconds: 0.2
+  _maxAccumulationDurationInSeconds: 0.5

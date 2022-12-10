@@ -1,4 +1,5 @@
 using MoreMountains.Feedbacks;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -13,6 +14,8 @@ public sealed class Movement : MonoBehaviour
 
     [SerializeField] bool _useShadowedMovement = false;
     [SerializeField] MeshRenderer _meshRenderer = null;
+    [SerializeField] RectTransform _holdJumpPercentageRectTransform = null;
+    [SerializeField] Vector3 _textPositionOffset = new Vector3(1.488f, -0.3f, -0.56f);
 
     [Header("Ground cast check")]
     [SerializeField] float _groundCastDistance = 0.0125f;
@@ -40,6 +43,7 @@ public sealed class Movement : MonoBehaviour
 
         Assert.IsNotNull(_jumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
         Assert.IsNotNull(_holdJumpPercentage, $"{nameof(Movement)} requires {nameof(_holdJumpPercentage)}.");
+        Assert.IsNotNull(_holdJumpPercentageRectTransform, $"{nameof(Movement)} requires {nameof(_holdJumpPercentageRectTransform)}.");
         Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
         Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
 
@@ -81,10 +85,16 @@ public sealed class Movement : MonoBehaviour
             }
         }
 
-
         _rigidbody.AddForce(movementForce, ForceMode.Force);
 
+        SetHoldJumpTextPosition();
+
         _hadGroundHitPreviousFrame = _hasGroundHit;
+    }
+
+    void SetHoldJumpTextPosition()
+    {
+        _holdJumpPercentageRectTransform.SetPositionAndRotation(transform.position + _textPositionOffset, Quaternion.identity);
     }
 
     bool CastGroundCheck()
@@ -121,7 +131,7 @@ public sealed class Movement : MonoBehaviour
         Gizmos.color = Color.green;
 
         Gizmos.DrawCube(transform.InverseTransformPoint(GetGroundCheckDestination()), GetGroundCheckSize());
-        
+
         Gizmos.matrix = prevMatrix;
         Gizmos.color = prevColor;
     }
