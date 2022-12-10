@@ -37,7 +37,6 @@ public sealed class Movement : MonoBehaviour
         if (_hasGroundHit && !_hadGroundHitPreviousFrame)
         {
             _groundDropFeedbacks.PlayFeedbacks();
-            Debug.Log("Feedback triggered");
         }
 
         Vector3 movementForce = Vector3.zero;
