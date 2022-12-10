@@ -18,8 +18,9 @@ public sealed class Movement : MonoBehaviour
 
     [Header("Feedbacks")]
     [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
-    //[SerializeField] MMFeedback _jumpFeedback = null;
-    //[SerializeField] MMFeedback _chargedJumpFeedback = null;
+    [SerializeField] MMFeedbacks _jumpFeedbacks = null;
+    [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.5f;
+    [SerializeField] MMFeedbacks _chargedJumpFeedbacks = null;
 
     // Movement 
     JumpCalculator _jumpCalculator = null;
@@ -31,7 +32,10 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_stats, $"{nameof(Movement)} requires {nameof(_stats)}.");
         Assert.IsNotNull(_jumpStats, $"{nameof(Movement)} requires {nameof(_jumpStats)}.");
         Assert.IsNotNull(_boxCollider, $"{nameof(Movement)} requires {nameof(_boxCollider)}.");
-        Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
+
+        //Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
+        //Assert.IsNotNull(_jumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
+        //Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
 
         _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats);
     }
@@ -42,7 +46,11 @@ public sealed class Movement : MonoBehaviour
         
         if (_hasGroundHit && !_hadGroundHitPreviousFrame)
         {
-            _groundDropFeedbacks.PlayFeedbacks();
+            _groundDropFeedbacks?.PlayFeedbacks();
+#if UNITY_EDITOR
+            if (_groundDropFeedbacks == null)
+                this.LogWarning($"no {nameof(_groundDropFeedbacks)} set");
+#endif
         }
 
         Vector3 movementForce = Vector3.zero;
@@ -53,7 +61,26 @@ public sealed class Movement : MonoBehaviour
             movementForce.x = _stats.FloatStrength * direction;
         }
 
-        movementForce.y = _jumpCalculator.Calculate();
+        float calculatedJumpStrength = _jumpCalculator.Calculate();
+        movementForce.y = calculatedJumpStrength;
+
+        if (_jumpCalculator.IsJumping)
+        {
+            _jumpFeedbacks?.PlayFeedbacks();
+#if UNITY_EDITOR
+            if (_jumpFeedbacks == null)
+                this.LogWarning($"no {nameof(_jumpFeedbacks)} set");
+#endif
+            if (_jumpCalculator.ThresholdReached(_chargedJumpFeedbackThresholdFactor, calculatedJumpStrength))
+            {
+                _chargedJumpFeedbacks?.PlayFeedbacks();
+#if UNITY_EDITOR
+                if (_chargedJumpFeedbacks == null)
+                    this.LogWarning($"no {nameof(_chargedJumpFeedbacks)} set");
+#endif
+            }
+        }
+
 
         _rigidbody.AddForce(movementForce, ForceMode.Force);
 

@@ -1,4 +1,5 @@
 using SeedWork.GameLogs;
+using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -7,8 +8,11 @@ public sealed class JumpCalculator
     readonly UserInputs _userInputs = null;
     readonly JumpStats _stats = null;
     readonly GameTimer _holdingTime = null;
-    bool _isJumping = false;
     readonly GameLogger _logger = null;
+    bool _isJumping = false;
+
+    public bool IsJumping { get => _isJumping; }
+    //public bool JumpStarted { get; private set; }
 
     public JumpCalculator(UserInputs userInputs, JumpStats stats)
     {
@@ -40,11 +44,12 @@ public sealed class JumpCalculator
         }
         else if (IsReleased() && !_isJumping) 
         {
-            float additionalStrength = (_holdingTime.MaxAllowedCurrent / _stats.AccumulationStepInSeconds) * _stats.AccumulatingStrength;
+            float additionalStrength = CalculateAdditionalStrength(_holdingTime.MaxAllowedCurrent);
             calculatedStrength = _stats.InitialStrength + additionalStrength;
             _holdingTime.ResetTime();
             _logger.Log($"{nameof(IsReleased)} calcedStrength: {calculatedStrength}");
             _isJumping = true;
+            //JumpStarted = true;
         }
         else
         {
@@ -53,5 +58,18 @@ public sealed class JumpCalculator
         }
 
         return calculatedStrength;
+    }
+
+    private float CalculateAdditionalStrength(float maximum)
+    {
+        return (maximum / _stats.AccumulationStepInSeconds) * _stats.AccumulatingStrength;
+    }
+
+    public bool ThresholdReached(float chargedJumpFeedbackThresholdFactor, float calculatedJumpStrength)
+    {
+        float maxPossibleStrength = CalculateAdditionalStrength(_stats.MaxAccumulationDurationInSeconds) + _stats.InitialStrength;
+        float threshold = maxPossibleStrength * chargedJumpFeedbackThresholdFactor;
+        _logger.Log($"maxPossibleStrength '{maxPossibleStrength} | calcedStrength '{calculatedJumpStrength}' > 'threshold '{threshold}'");
+        return calculatedJumpStrength > threshold; 
     }
 }
