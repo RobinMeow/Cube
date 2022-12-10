@@ -71,7 +71,7 @@ public class InGameLogger : MonoBehaviour
                 }
 
                 GUIStyle loggerStyles = GetLoggerStyles(logger, defaultStyles);
-                GUIContent logContent = new GUIContent(logs.ToString(), logger.GameObject.name);
+                GUIContent logContent = new GUIContent(logs.ToString(), logger.GameObject != null ? logger.GameObject.name : "");
                 
                 Vector2 logSize = loggerStyles.CalcSize(logContent);
 

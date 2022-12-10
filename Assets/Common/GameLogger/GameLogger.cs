@@ -31,8 +31,13 @@ namespace SeedWork.GameLogs
         public GameObject GameObject => _gameObject;
         readonly Func<float> _getTimeStamp;
 
+        public GameLogger(string name)
+            : this(name, null)
+        {
+        }
+
         public GameLogger(string name, GameObject gameObject)
-            : this(name, gameObject, null, null)
+            : this(name, gameObject, null)
         {
         }
 
@@ -41,15 +46,16 @@ namespace SeedWork.GameLogs
         {
         }
 
-        public GameLogger(string name, GameObject gameObject, LoggerOptions options, Func<float> getTimeStamp)
+        public GameLogger(string name, GameObject gameObject, LoggerOptions options, Func<float> getTimeStamp, bool subscribeByDefault = true)
         {
             Assert.IsFalse(String.IsNullOrWhiteSpace(name), $"{nameof(GameLogger)} requires a name. ");
-            Assert.IsNotNull(gameObject, $"{nameof(gameObject)} passed into {nameof(GameLogger)} '{name}' may not be null.");
 
             _options = options;
             _gameObject = gameObject;
             _getTimeStamp = getTimeStamp;
             _name = name;
+            if (subscribeByDefault)
+                Subscribe();
         }
 
         [Conditional("UNITY_EDITOR")]
