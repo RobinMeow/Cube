@@ -746,10 +746,15 @@ PrefabInstance:
       propertyPath: AnimateScaleZ.m_Curve.Array.data[1].value
       value: 1.05
       objectReference: {fileID: 0}
+    - target: {fileID: 5346906032292789172, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+      propertyPath: Feedbacks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6670418874343354943, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
     - {fileID: 0}
     - {fileID: 2423226800045892603, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+    - {fileID: 2963560393231887071, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
 --- !u!4 &5018622400170037289 stripped
 Transform:
