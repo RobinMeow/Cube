@@ -65,7 +65,7 @@ MonoBehaviour:
   _holdJumpPercentage: {fileID: 4319382196933475820}
   _chargedJumpFeedbacks: {fileID: 5346906032292789172}
   _groundDropFeedbacks: {fileID: 6858965356078814256}
-  _chargedJumpFeedbackThresholdFactor: 0.5
+  _chargedJumpFeedbackThresholdFactor: 0.9
 --- !u!65 &8731177236709520833
 BoxCollider:
   m_ObjectHideFlags: 0

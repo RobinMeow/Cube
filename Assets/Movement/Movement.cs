@@ -28,7 +28,7 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] TextMeshPro _holdJumpPercentage = null;
     [SerializeField] MMFeedbacks _chargedJumpFeedbacks = null;
     [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
-    [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.5f;
+    [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.9f;
 
     // Movement 
     JumpCalculator _jumpCalculator = null;
