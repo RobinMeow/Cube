@@ -28,6 +28,8 @@ public sealed class JumpCalculator
         _holdingTime = new GameTimer(_stats.MaxAccumulationDurationInSeconds);
     }
 
+    public bool IsHolding() => _userInputs.JumpIsPressed && _userInputs.JumpWasPressedPreviousFixedUpdate;
+
     /// <summary>
     /// this should be called each frame
     /// </summary>
@@ -36,7 +38,7 @@ public sealed class JumpCalculator
         float calculatedStrength = 0.0f;
         
         //bool StartedPressing() => _userInputs.JumpIsPressed && !_userInputs.JumpWasPressedPreviousFixedUpdate;
-        bool IsHolding() => _userInputs.JumpIsPressed && _userInputs.JumpWasPressedPreviousFixedUpdate;
+        
         bool IsReleased() => !_userInputs.JumpIsPressed && _userInputs.JumpWasPressedPreviousFixedUpdate;
 
         if (IsHolding() && !_isJumping) 

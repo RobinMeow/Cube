@@ -54,7 +54,7 @@ public sealed class Movement : MonoBehaviour
         Vector3 movementForce = Vector3.zero;
         float direction = _userInputs.MoveDirection.x;
 
-        if (direction != 0.0f)
+        if (direction != 0.0f && !_jumpCalculator.IsHolding())
         {
             movementForce.x = _stats.FloatStrength * direction;
         }

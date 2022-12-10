@@ -304,6 +304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4458558814515401668}
   - component: {fileID: 6858965356078814256}
+  - component: {fileID: 7239561241293922198}
   m_Layer: 0
   m_Name: GroundDropFeedbacks
   m_TagString: Untagged
@@ -338,9 +339,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 841b72de2996c5c40bfb394f3d0e0a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Feedbacks: []
+  Feedbacks:
+  - {fileID: 7239561241293922198}
   InitializationMode: 2
   DebugActive: 0
+--- !u!114 &7239561241293922198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8477154529032544578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2ce51367856bd49b72678cc4263225, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Active: 1
+  Label: Sound
+  Timing:
+    InitialDelay: 0
+    CooldownDuration: 0
+    NumberOfRepeats: 0
+    RepeatForever: 0
+    DelayBetweenRepeats: 1
+  DebugActive: 0
+  Sfx: {fileID: 8300000, guid: 5b3e6648d82f80841ab142c119502d90, type: 3}
+  RandomSfx: []
+  PlayMethod: 1
+  MinVolume: 1
+  MaxVolume: 1
+  MinPitch: 1
+  MaxPitch: 1
+  SfxAudioMixerGroup: {fileID: 0}
 --- !u!1 &8646861262938794494
 GameObject:
   m_ObjectHideFlags: 0
