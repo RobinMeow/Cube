@@ -1,5 +1,4 @@
 using MoreMountains.Feedbacks;
-using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -59,9 +58,7 @@ public sealed class Movement : MonoBehaviour
 
     bool CastGroundCheck()
     {
-        bool lol = Physics.BoxCast(GetGroundCheckOrigin(), GetGroundCheckExtends(), Vector3.down, out _groundHit, transform.rotation, _groundCastDistance);
-        Debug.Log(_groundHit.collider?.transform.name);
-        return lol;
+        return Physics.BoxCast(GetGroundCheckOrigin(), GetGroundCheckExtends(), Vector3.down, out _groundHit, transform.rotation, _groundCastDistance);
     }
 
     Vector3 GetGroundCheckOrigin()
