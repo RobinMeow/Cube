@@ -1,5 +1,6 @@
 using SeedWork.GameLogs;
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -8,6 +9,7 @@ public sealed class JumpCalculator
     readonly UserInputs _userInputs = null;
     readonly JumpStats _stats = null;
     readonly Rigidbody _rigidbody;
+    readonly TextMeshPro _holdJumpPercentage;
     readonly GameTimer _holdingTime = null;
     static GameLogger _loggerInstance = new GameLogger("JumpCalculator");
     static GameLogger _logger => _loggerInstance;
@@ -16,7 +18,7 @@ public sealed class JumpCalculator
     public bool IsJumping { get => _isJumping; }
     //public bool JumpStarted { get; private set; }
 
-    public JumpCalculator(UserInputs userInputs, JumpStats stats, Rigidbody rigidbody)
+    public JumpCalculator(UserInputs userInputs, JumpStats stats, Rigidbody rigidbody, TextMeshPro holdJumpPercentage)
     {
         Assert.IsNotNull(userInputs, $"{nameof(JumpCalculator)} requires {nameof(userInputs)} typeof {nameof(UserInputs)}");
         Assert.IsNotNull(stats, $"{nameof(JumpCalculator)} requires {nameof(stats)} typeof {nameof(JumpStats)}");
@@ -25,6 +27,7 @@ public sealed class JumpCalculator
         _userInputs = userInputs;
         _stats = stats;
         _rigidbody = rigidbody;
+        _holdJumpPercentage = holdJumpPercentage;
         _holdingTime = new GameTimer(_stats.MaxAccumulationDurationInSeconds);
     }
 
@@ -44,6 +47,7 @@ public sealed class JumpCalculator
         if (IsHolding() && !_isJumping) 
         {
             _holdingTime.Tick(Time.deltaTime);
+            _holdJumpPercentage.text = (_holdingTime.CompletedFactor * 100.0f).ToString("00") + " %";
             _logger.Log($"{nameof(IsHolding)} calcedStrength: {calculatedStrength}");
             
             if (_rigidbody.useGravity)
@@ -54,7 +58,7 @@ public sealed class JumpCalculator
         }
         else if (IsReleased() && !_isJumping) 
         {
-            float additionalStrength = CalculateAdditionalStrength(_holdingTime.MaxAllowedCurrent);
+            float additionalStrength = CalculateAdditionalStrength(_holdingTime.Current);
             calculatedStrength = _stats.InitialStrength + additionalStrength;
             _holdingTime.ResetTime();
             _logger.Log($"{nameof(IsReleased)} calcedStrength: {calculatedStrength}");
@@ -67,6 +71,8 @@ public sealed class JumpCalculator
             _isJumping = false;
             if (!_rigidbody.useGravity)
                 _rigidbody.useGravity = true;
+
+            _holdJumpPercentage.text = String.Empty;
         }
 
         return calculatedStrength;

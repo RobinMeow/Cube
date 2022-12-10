@@ -6,7 +6,7 @@ public sealed class GameTimer
 
 	public float CompletedFactor { get => _current / _end; }
     public float RemainingTime { get => _end - _current; }
-	public float MaxAllowedCurrent { get => _current < _end ? _current : _end; }
+	public float Current { get => _current; }
 
 	public GameTimer(float begin, float end)
 	{
@@ -25,6 +25,8 @@ public sealed class GameTimer
     public void Tick(float amount)
 	{
 		_current += amount;
+		if (_current > _end)
+			_current = _end;
 	}
 
 	public bool HasReachedEnd()

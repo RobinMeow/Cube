@@ -1,4 +1,5 @@
 using MoreMountains.Feedbacks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -11,6 +12,7 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] BoxCollider _boxCollider = null;
 
     [SerializeField] bool _useShadowedMovement = false;
+    [SerializeField] MeshRenderer _meshRenderer = null;
 
     [Header("Ground cast check")]
     [SerializeField] float _groundCastDistance = 0.0125f;
@@ -20,7 +22,7 @@ public sealed class Movement : MonoBehaviour
 
     [Header("Feedbacks")]
     [SerializeField] MMFeedbacks _jumpFeedbacks = null;
-    [SerializeField] MMFeedbacks _holdJumpFeedbacks = null;
+    [SerializeField] TextMeshPro _holdJumpPercentage = null;
     [SerializeField] MMFeedbacks _chargedJumpFeedbacks = null;
     [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
     [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.5f;
@@ -37,11 +39,12 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_boxCollider, $"{nameof(Movement)} requires {nameof(_boxCollider)}.");
 
         Assert.IsNotNull(_jumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
-        Assert.IsNotNull(_holdJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
+        Assert.IsNotNull(_holdJumpPercentage, $"{nameof(Movement)} requires {nameof(_holdJumpPercentage)}.");
         Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
         Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
 
-        _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats, _rigidbody);
+        _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats, _rigidbody, _holdJumpPercentage);
+        _holdJumpPercentage.color = _meshRenderer.material.color;
     }
 
     void FixedUpdate()
