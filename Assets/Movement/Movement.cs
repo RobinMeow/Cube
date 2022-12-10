@@ -37,7 +37,7 @@ public sealed class Movement : MonoBehaviour
         //Assert.IsNotNull(_jumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
         //Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
 
-        _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats);
+        _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats, _rigidbody);
     }
 
     void FixedUpdate()

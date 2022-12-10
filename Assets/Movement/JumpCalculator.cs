@@ -7,6 +7,7 @@ public sealed class JumpCalculator
 {
     readonly UserInputs _userInputs = null;
     readonly JumpStats _stats = null;
+    readonly Rigidbody _rigidbody;
     readonly GameTimer _holdingTime = null;
     readonly GameLogger _logger = null;
     bool _isJumping = false;
@@ -14,13 +15,15 @@ public sealed class JumpCalculator
     public bool IsJumping { get => _isJumping; }
     //public bool JumpStarted { get; private set; }
 
-    public JumpCalculator(UserInputs userInputs, JumpStats stats)
+    public JumpCalculator(UserInputs userInputs, JumpStats stats, Rigidbody rigidbody)
     {
         Assert.IsNotNull(userInputs, $"{nameof(JumpCalculator)} requires {nameof(userInputs)} typeof {nameof(UserInputs)}");
         Assert.IsNotNull(stats, $"{nameof(JumpCalculator)} requires {nameof(stats)} typeof {nameof(JumpStats)}");
+        Assert.IsNotNull(rigidbody, $"{nameof(JumpCalculator)} requires {nameof(rigidbody)} typeof {nameof(Rigidbody)}");
 
         _userInputs = userInputs;
         _stats = stats;
+        _rigidbody = rigidbody;
         _holdingTime = new GameTimer(_stats.MaxAccumulationDurationInSeconds);
 
         _logger = new GameLogger("JumpCalculator");
@@ -41,6 +44,12 @@ public sealed class JumpCalculator
         {
             _holdingTime.Tick(Time.deltaTime);
             _logger.Log($"{nameof(IsHolding)} calcedStrength: {calculatedStrength}");
+            
+            if (_rigidbody.useGravity)
+            {
+                _rigidbody.useGravity = false;
+                _rigidbody.velocity = Vector3.zero;
+            }
         }
         else if (IsReleased() && !_isJumping) 
         {
@@ -55,6 +64,8 @@ public sealed class JumpCalculator
         {
             // leave default: Zero 
             _isJumping = false;
+            if (!_rigidbody.useGravity)
+                _rigidbody.useGravity = true;
         }
 
         return calculatedStrength;
@@ -69,7 +80,7 @@ public sealed class JumpCalculator
     {
         float maxPossibleStrength = CalculateAdditionalStrength(_stats.MaxAccumulationDurationInSeconds) + _stats.InitialStrength;
         float threshold = maxPossibleStrength * chargedJumpFeedbackThresholdFactor;
-        _logger.Log($"maxPossibleStrength '{maxPossibleStrength} | calcedStrength '{calculatedJumpStrength}' > 'threshold '{threshold}'");
+        _logger.Log($"maxPossibleStrength '{maxPossibleStrength}' | calcedStrength '{calculatedJumpStrength}' > 'threshold '{threshold}'");
         return calculatedJumpStrength > threshold; 
     }
 }
