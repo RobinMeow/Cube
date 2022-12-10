@@ -138,6 +138,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CubeShooterPurple
       objectReference: {fileID: 0}
+    - target: {fileID: 184757553702838798, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 252446041894613867, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -207,6 +211,10 @@ PrefabInstance:
     - target: {fileID: 184757553702838798, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_Name
       value: CubeShooterGreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 184757553702838798, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 252446041894613867, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_RootOrder

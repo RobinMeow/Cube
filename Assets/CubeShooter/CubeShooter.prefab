@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 671348674}
   - component: {fileID: 7178754013220677573}
   - component: {fileID: 1732698090394250394}
+  - component: {fileID: -5578196286464555040}
   m_Layer: 0
   m_Name: CubeShooter
   m_TagString: Untagged
@@ -53,6 +54,9 @@ MonoBehaviour:
   _userInputs: {fileID: 0}
   _rigidbody: {fileID: 671348674}
   _stats: {fileID: 11400000, guid: fe3ff51cad1f92a42b43480e5c21244d, type: 2}
+  _boxCollider: {fileID: 8731177236709520833}
+  _groundDropFeedbacks: {fileID: 7178754013220677573}
+  _groundCastDistance: 0.05
 --- !u!33 &7864704049301246545
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -146,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks:
   - {fileID: 1732698090394250394}
+  - {fileID: -5578196286464555040}
   InitializationMode: 2
   DebugActive: 0
 --- !u!114 &1732698090394250394
@@ -160,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d958a52145b19904aa2a5bcb3849eafb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Active: 1
+  Active: 0
   Label: Scale
   Timing:
     InitialDelay: 0
@@ -271,3 +276,32 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-5578196286464555040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184757553702838798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2ce51367856bd49b72678cc4263225, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Active: 1
+  Label: Sound - GroundDrop
+  Timing:
+    InitialDelay: 0
+    CooldownDuration: 0
+    NumberOfRepeats: 0
+    RepeatForever: 0
+    DelayBetweenRepeats: 1
+  DebugActive: 0
+  Sfx: {fileID: 8300000, guid: 5b3e6648d82f80841ab142c119502d90, type: 3}
+  RandomSfx: []
+  PlayMethod: 1
+  MinVolume: 1
+  MaxVolume: 1
+  MinPitch: 1
+  MaxPitch: 1
+  SfxAudioMixerGroup: {fileID: 0}
