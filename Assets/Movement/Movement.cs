@@ -10,6 +10,8 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] JumpStats _jumpStats = null;
     [SerializeField] BoxCollider _boxCollider = null;
 
+    [SerializeField] bool _useShadowedMovement = false;
+
     [Header("Ground cast check")]
     [SerializeField] float _groundCastDistance = 0.0125f;
     RaycastHit _groundHit = new RaycastHit();
@@ -53,6 +55,8 @@ public sealed class Movement : MonoBehaviour
 
         Vector3 movementForce = Vector3.zero;
         float direction = _userInputs.MoveDirection.x;
+        if (_useShadowedMovement)
+            direction *= -1.0f;
 
         if (direction != 0.0f && !_jumpCalculator.IsHolding())
         {
