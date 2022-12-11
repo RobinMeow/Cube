@@ -1,3 +1,5 @@
+
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -9,3 +11,4 @@ public sealed class Pfusch : MonoBehaviour
         AudioListener.volume *= 0.2f;
     }
 }
+#endif
