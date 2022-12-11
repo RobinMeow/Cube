@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Stats
   m_EditorClassIdentifier: 
   _jumpStrength: 600
-  _floatStrength: 300
+  _floatStrength: 500
