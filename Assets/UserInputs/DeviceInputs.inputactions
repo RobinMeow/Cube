@@ -1,5 +1,5 @@
 {
-    "name": "CubeScheme",
+    "name": "DeviceInputs",
     "maps": [
         {
             "name": "CubeShooter",
@@ -40,6 +40,17 @@
                     "name": "",
                     "id": "db783621-a51f-436f-9577-67282a5ec881",
                     "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "166c603a-eb13-4cb3-87b9-8b3fd154592c",
+                    "path": "<Touchscreen>/Press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

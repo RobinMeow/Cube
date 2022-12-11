@@ -70,6 +70,17 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""166c603a-eb13-4cb3-87b9-8b3fd154592c"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""AD"",
                     ""id"": ""d45fcb0e-3164-43f5-b12d-70226ee91d45"",
                     ""path"": ""1DAxis"",
