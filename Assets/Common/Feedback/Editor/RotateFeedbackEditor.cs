@@ -39,37 +39,37 @@ public sealed class RotateFeedbackEditor : Editor
         _curveZProp = serializedObject.FindProperty("_curveZ");
     }
 
+    // ToDo:
+    // -transform values display 
+    // -stop test, (stop coroutine) when is on loop
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
         
-        EditorGUILayout.BeginHorizontal();
-        {
-            EditorGUILayout.LabelField("Target", MAX_WIDTH_50);
-            _targetProp.objectReferenceValue = EditorGUILayout.ObjectField(_targetProp.objectReferenceValue, typeof(Transform), allowSceneObjects: true);
-        }
-        EditorGUILayout.EndHorizontal();
+        DrawProperties();
 
         EditorGUILayout.Space();
-        
-        EditorGUILayout.BeginHorizontal();
-        {
-            EditorGUILayout.LabelField("Duration", MAX_WIDTH_50);
-            _durationProp.floatValue = EditorGUILayout.FloatField(_durationProp.floatValue, MAX_WIDTH_50);
-            
-            EditorGUILayout.LabelField("Restore Values", MAX_WIDTH_90);
-            _restorePreviousProp.boolValue = EditorGUILayout.Toggle(_restorePreviousProp.boolValue, MAX_WIDTH_50);
-            
-            EditorGUILayout.LabelField("Loop", MAX_WIDTH_30);
-            _loopProp.boolValue = EditorGUILayout.Toggle(_loopProp.boolValue, MAX_WIDTH_50);
-        }
-        EditorGUILayout.EndHorizontal();
-        
+
+        DrawTestButton();
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    void DrawProperties()
+    {
+        // properties 
+        _targetProp.objectReferenceValue = EditorGUILayout.ObjectField("Target", _targetProp.objectReferenceValue, typeof(Transform), allowSceneObjects: true);
+        _durationProp.floatValue = EditorGUILayout.FloatField("Duration", _durationProp.floatValue);
+        _restorePreviousProp.boolValue = EditorGUILayout.Toggle("Restore Values", _restorePreviousProp.boolValue);
+        _loopProp.boolValue = EditorGUILayout.Toggle("Loop", _loopProp.boolValue);
+
         EditorGUILayout.Space();
 
         GUIContent curveLabelContent = new GUIContent("Curves", multiplierToolTip);
         EditorGUILayout.LabelField(curveLabelContent, MAX_WIDTH_50);
-        
+
+        // Multipliers for AnimationCurve-KeyValues 
         EditorGUILayout.BeginHorizontal();
         {
             Vector3Int curveMultipliers = EditorGUILayout.Vector3IntField("Multipliers", new Vector3Int(_multiplierXProp.intValue, _multiplierYProp.intValue, _multiplierZProp.intValue));
@@ -78,23 +78,15 @@ public sealed class RotateFeedbackEditor : Editor
             _multiplierZProp.intValue = curveMultipliers.z;
         }
         EditorGUILayout.EndHorizontal();
-        
-        EditorGUILayout.BeginHorizontal();
-        {
-            EditorGUILayout.LabelField("Curves", GUILayout.MaxWidth(165.0f));
-            const float meow = 85.0f;
-            _curveXProp.animationCurveValue = EditorGUILayout.CurveField(_curveXProp.animationCurveValue, GUILayout.MinWidth(meow), GUILayout.MaxWidth(meow));
-            _curveYProp.animationCurveValue = EditorGUILayout.CurveField(_curveYProp.animationCurveValue, GUILayout.MinWidth(meow), GUILayout.MaxWidth(meow));
-            _curveZProp.animationCurveValue = EditorGUILayout.CurveField(_curveZProp.animationCurveValue, GUILayout.MinWidth(meow), GUILayout.MaxWidth(meow));
-        }
-        EditorGUILayout.EndHorizontal();
 
+        // Animation Curves
+        _curveXProp.animationCurveValue = EditorGUILayout.CurveField("X", _curveXProp.animationCurveValue);
+        _curveYProp.animationCurveValue = EditorGUILayout.CurveField("Y", _curveYProp.animationCurveValue);
+        _curveZProp.animationCurveValue = EditorGUILayout.CurveField("Z", _curveZProp.animationCurveValue);
+    }
 
-            
-
-
-        EditorGUILayout.Space();
-
+    void DrawTestButton()
+    {
         if (GUILayout.Button("Test", EditorStyles.miniButtonMid))
         {
             if (_rotateFeedback == null)
@@ -113,7 +105,5 @@ public sealed class RotateFeedbackEditor : Editor
                 _rotateFeedback.Log($"Wait for the rotation to finish, before testing again.\nThis ensures, the 'Restore Values' function works propperly.");
             }
         }
-
-        serializedObject.ApplyModifiedProperties();
     }
 }
