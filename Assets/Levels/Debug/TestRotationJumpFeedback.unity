@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 1264691955}
+  _multipliers: {x: 180, y: 90, z: 90}
   _curveX:
     serializedVersion: 2
     m_Curve:
@@ -384,7 +385,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _multiplierX: -20
   _curveY:
     serializedVersion: 2
     m_Curve:
@@ -418,7 +418,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _multiplierY: 40
   _curveZ:
     serializedVersion: 2
     m_Curve:
@@ -452,10 +451,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _multiplierZ: 20
   _duration: 1
   _loop: 0
-  _restorePrevious: 1
+  _restorePrevious: 0
 --- !u!1 &1264691954
 GameObject:
   m_ObjectHideFlags: 0

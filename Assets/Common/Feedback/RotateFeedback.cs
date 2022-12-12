@@ -9,14 +9,11 @@ public sealed class RotateFeedback : MonoBehaviour
 {
     [SerializeField] Transform _target;
 
+    [SerializeField] Vector3Int _multipliers = new Vector3Int(180, 1, 1);
+    
     [SerializeField] AnimationCurve _curveX = null;
-    [SerializeField] int _multiplierX = 360;
-
     [SerializeField] AnimationCurve _curveY = null;
-    [SerializeField] int _multiplierY = 360;
-
     [SerializeField] AnimationCurve _curveZ = null;
-    [SerializeField] int _multiplierZ = 360;
 
     [SerializeField] float _duration = 0.5f;
     [SerializeField] bool _loop = false;
@@ -53,9 +50,9 @@ public sealed class RotateFeedback : MonoBehaviour
 
             void RotateBy(float factor)
             {
-                rotation.x = _curveX.Evaluate(factor) * _multiplierX;
-                rotation.y = _curveY.Evaluate(factor) * _multiplierY;
-                rotation.z = _curveZ.Evaluate(factor) * _multiplierZ;
+                rotation.x = _curveX.Evaluate(factor) * _multipliers.x;
+                rotation.y = _curveY.Evaluate(factor) * _multipliers.y;
+                rotation.z = _curveZ.Evaluate(factor) * _multipliers.z;
             }
 
             if (_restorePrevious)

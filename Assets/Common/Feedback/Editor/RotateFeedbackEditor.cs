@@ -17,9 +17,7 @@ public sealed class RotateFeedbackEditor : Editor
     SerializedProperty _durationProp = null;
     SerializedProperty _restorePreviousProp = null;
     SerializedProperty _loopProp = null;
-    SerializedProperty _multiplierXProp = null;
-    SerializedProperty _multiplierYProp = null;
-    SerializedProperty _multiplierZProp = null;
+    SerializedProperty _multipliersProp = null;
     SerializedProperty _curveXProp = null;
     SerializedProperty _curveYProp = null;
     SerializedProperty _curveZProp = null;
@@ -31,9 +29,7 @@ public sealed class RotateFeedbackEditor : Editor
         _durationProp = serializedObject.FindProperty("_duration");
         _restorePreviousProp = serializedObject.FindProperty("_restorePrevious");
         _loopProp = serializedObject.FindProperty("_loop");
-        _multiplierXProp = serializedObject.FindProperty("_multiplierX");
-        _multiplierYProp = serializedObject.FindProperty("_multiplierY");
-        _multiplierZProp = serializedObject.FindProperty("_multiplierZ");
+        _multipliersProp = serializedObject.FindProperty("_multipliers");
         _curveXProp = serializedObject.FindProperty("_curveX");
         _curveYProp = serializedObject.FindProperty("_curveY");
         _curveZProp = serializedObject.FindProperty("_curveZ");
@@ -45,15 +41,16 @@ public sealed class RotateFeedbackEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        serializedObject.Update();
+        base.OnInspectorGUI();
+        //serializedObject.Update();
         
-        DrawProperties();
+        //DrawProperties();
 
         EditorGUILayout.Space();
 
         DrawTestButton();
 
-        serializedObject.ApplyModifiedProperties();
+        //serializedObject.ApplyModifiedProperties();
     }
 
     void DrawProperties()
@@ -70,14 +67,7 @@ public sealed class RotateFeedbackEditor : Editor
         EditorGUILayout.LabelField(curveLabelContent, MAX_WIDTH_50);
 
         // Multipliers for AnimationCurve-KeyValues 
-        EditorGUILayout.BeginHorizontal();
-        {
-            Vector3Int curveMultipliers = EditorGUILayout.Vector3IntField("Multipliers", new Vector3Int(_multiplierXProp.intValue, _multiplierYProp.intValue, _multiplierZProp.intValue));
-            _multiplierXProp.intValue = curveMultipliers.x;
-            _multiplierYProp.intValue = curveMultipliers.y;
-            _multiplierZProp.intValue = curveMultipliers.z;
-        }
-        EditorGUILayout.EndHorizontal();
+        _multipliersProp.vector3IntValue = EditorGUILayout.Vector3IntField("Multipliers", _multipliersProp.vector3IntValue);
 
         // Animation Curves
         _curveXProp.animationCurveValue = EditorGUILayout.CurveField("X", _curveXProp.animationCurveValue);
@@ -87,7 +77,7 @@ public sealed class RotateFeedbackEditor : Editor
 
     void DrawTestButton()
     {
-        if (GUILayout.Button("Test", EditorStyles.miniButtonMid))
+        if (GUILayout.Button("Test", EditorStyles.miniButtonLeft))
         {
             if (_rotateFeedback == null)
             {
@@ -97,7 +87,7 @@ public sealed class RotateFeedbackEditor : Editor
 
             if (!_rotateFeedback.IsRotating)
             {
-                EditorCoroutineUtility.StartCoroutineOwnerless(_rotateFeedback.Rotating());
+                editorCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(_rotateFeedback.Rotating());
             }
             else
             {
@@ -105,5 +95,15 @@ public sealed class RotateFeedbackEditor : Editor
                 _rotateFeedback.Log($"Wait for the rotation to finish, before testing again.\nThis ensures, the 'Restore Values' function works propperly.");
             }
         }
+        else if (GUILayout.Button("Stop Test", EditorStyles.miniButtonRight))
+        {
+            if (_rotateFeedback.IsRotating && editorCoroutine != null)
+            {
+                //EditorCoroutineUtility.StopCoroutine(editorCoroutine);
+                // THIS doesnt reset the values 
+                // AND it doesnt call IsRotating = false 
+            }
+        }
     }
+    EditorCoroutine editorCoroutine = null;
 }
