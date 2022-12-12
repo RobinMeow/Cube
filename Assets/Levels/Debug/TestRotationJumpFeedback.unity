@@ -339,26 +339,53 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 7.06564
+      outSlope: 7.06564
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      time: 0.10534653
+      value: 0.74434066
+      inSlope: 2.556088
+      outSlope: 2.556088
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4472813
+      value: 0.07638347
+      inSlope: 2.193252
+      outSlope: 2.193252
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5591792
+      value: 0.7858125
+      inSlope: 1.6966028
+      outSlope: 1.6966028
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7877307
+      value: 0.11232549
+      inSlope: 0.61753464
+      outSlope: 0.61753464
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -2
-      outSlope: -2
+      value: 1
+      inSlope: 4.181832
+      outSlope: 4.181832
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -366,7 +393,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _multiplierX: 45
+  _multiplierX: 180
   _curveY:
     serializedVersion: 2
     m_Curve:
@@ -400,7 +427,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _multiplierY: 180
+  _multiplierY: 1
   _curveZ:
     serializedVersion: 2
     m_Curve:
@@ -426,7 +453,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _multiplierZ: 1
-  _duration: 0.5
+  _duration: 1
+  _loop: 0
   _restorePrevious: 1
 --- !u!1 &1264691954
 GameObject:
@@ -537,7 +565,7 @@ BoxCollider:
   m_GameObject: {fileID: 1464794404}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
