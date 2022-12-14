@@ -1,5 +1,4 @@
-using System;
-using System.IO.Ports;
+using System.Collections;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -7,11 +6,10 @@ using UnityEngine;
 [CustomEditor(typeof(RotateFeedback))]
 public sealed class RotateFeedbackEditor : Editor
 {
+    const object WAIT_FOR_NEXT_FRAME = null;
     RotateFeedback _rotateFeedback = null;
     const string multiplierToolTip = "you can keep the curve between 0 and 1 values. This value cales it up to your input. f.e. 360 when you want to make full rotation.";
     static readonly GUILayoutOption MAX_WIDTH_50 = GUILayout.MaxWidth(50.0f);
-    static readonly GUILayoutOption MAX_WIDTH_90 = GUILayout.MaxWidth(90.0f);
-    static readonly GUILayoutOption MAX_WIDTH_30 = GUILayout.MaxWidth(30.0f);
     
     SerializedProperty _targetProp = null;
     SerializedProperty _durationProp = null;
@@ -21,6 +19,10 @@ public sealed class RotateFeedbackEditor : Editor
     SerializedProperty _curveXProp = null;
     SerializedProperty _curveYProp = null;
     SerializedProperty _curveZProp = null;
+
+    // for Testing 
+    EditorCoroutine _testRotation = null;
+    EditorCoroutine _startTestCoroutine = null;
 
     void OnEnable()
     {
@@ -37,7 +39,6 @@ public sealed class RotateFeedbackEditor : Editor
 
     // ToDo:
     // -transform values display 
-    // -stop test, (stop coroutine) when is on loop
 
     public override void OnInspectorGUI()
     {
@@ -48,7 +49,8 @@ public sealed class RotateFeedbackEditor : Editor
 
         EditorGUILayout.Space();
 
-        DrawTestButton();
+        if (!Application.isPlaying)
+            DrawTestButton();
 
         //serializedObject.ApplyModifiedProperties();
     }
@@ -74,36 +76,88 @@ public sealed class RotateFeedbackEditor : Editor
         _curveYProp.animationCurveValue = EditorGUILayout.CurveField("Y", _curveYProp.animationCurveValue);
         _curveZProp.animationCurveValue = EditorGUILayout.CurveField("Z", _curveZProp.animationCurveValue);
     }
-
+    
+    bool IsTestRunning() => _startTestCoroutine != null;
+    
     void DrawTestButton()
     {
-        if (GUILayout.Button("Test", EditorStyles.miniButtonLeft))
-        {
-            if (_rotateFeedback == null)
-            {
-                Debug.LogError($"I think this never happens. Unless OnInspectorGUI is called before OnEnabled. (????)?????");
-                return;
-            }
+        bool testPressed = false;
+        bool stopTestPressed = false;
 
-            if (!_rotateFeedback.IsRotating)
+        EditorGUILayout.BeginHorizontal();
+        {
+            bool testIsRunning = IsTestRunning();
+            EditorGUI.BeginDisabledGroup(disabled: testIsRunning);
             {
-                editorCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(_rotateFeedback.Rotating());
+                testPressed = GUILayout.Button("Test", EditorStyles.miniButtonLeft);
             }
-            else
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.BeginDisabledGroup(disabled: !testIsRunning);
             {
-                // Running multiple Coroutines will cause the coroutines, after the first one, to remember and restore wrong values. 
-                _rotateFeedback.Log($"Wait for the rotation to finish, before testing again.\nThis ensures, the 'Restore Values' function works propperly.");
+                stopTestPressed = GUILayout.Button("Stop Test", EditorStyles.miniButtonRight);
+            }
+            EditorGUI.EndDisabledGroup();
+
+        }
+        EditorGUILayout.EndHorizontal();
+
+        if (testPressed) 
+            StartTest();
+        else if (stopTestPressed)
+            StopTest();
+    }
+
+    void StartTest()
+    {
+        if (!IsTestRunning())
+        {
+            _startTestCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(StartTestRotation()); // dont block the Inspector UI 
+            IEnumerator StartTestRotation()
+            {
+                _testRotation = EditorCoroutineUtility.StartCoroutineOwnerless(_rotateFeedback.Rotating());
+
+                bool rotationStarted = false;
+                do
+                {
+                    yield return WAIT_FOR_NEXT_FRAME;
+                    
+                    if (_rotateFeedback.IsRotating)
+                        rotationStarted = true;
+                } 
+                while (!rotationStarted);
+            
+                do
+                {
+                    yield return WAIT_FOR_NEXT_FRAME;
+                } 
+                while (_rotateFeedback.IsRotating);
+
+                _testRotation = null;
+                _startTestCoroutine = null;
             }
         }
-        else if (GUILayout.Button("Stop Test", EditorStyles.miniButtonRight))
+        else
         {
-            if (_rotateFeedback.IsRotating && editorCoroutine != null)
-            {
-                //EditorCoroutineUtility.StopCoroutine(editorCoroutine);
-                // THIS doesnt reset the values 
-                // AND it doesnt call IsRotating = false 
-            }
+            _rotateFeedback.LogWarning("Test is already running");
         }
     }
-    EditorCoroutine editorCoroutine = null;
+
+    void StopTest()
+    {
+        if (_testRotation != null)
+        {
+            EditorCoroutineUtility.StopCoroutine(_testRotation);
+            _rotateFeedback.StopInstantly();
+            _testRotation = null;
+            
+            if (_startTestCoroutine != null)
+            {
+                EditorCoroutineUtility.StopCoroutine(_startTestCoroutine);
+                _startTestCoroutine = null;
+            }
+        }
+        else
+            _rotateFeedback.LogWarning($"Cannot stop test. Not running or already finished");
+    }
 }

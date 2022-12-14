@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
-using System.Linq;
-using UnityEditor;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -19,15 +18,43 @@ public sealed class RotateFeedback : MonoBehaviour
     [SerializeField] bool _loop = false;
     [SerializeField] bool _restorePrevious = true;
 
+    IEnumerator _rotating = null;
+    Vector3 _previousRotation = Vector3.zero;
+
     public bool IsRotating { get; private set; }
+    public Transform Target { get => _target; }
 
     void Awake()
     {
         Assert.IsNotNull(_target, $"{_target} required for {nameof(RotateFeedback)}");
     }
 
+    public void StartRotation()
+    {
+        _previousRotation = _target.transform.localEulerAngles; // ToDo: change to work as actual rotation, may be better in performance 
+        _rotating = Rotating();
+        StartCoroutine(_rotating);
+    }
+
+    public void StopRotation()
+    {
+        if (_rotating == null)
+            this.LogWarning($"{gameObject.name} Rotation Coroutine cannot be stopped, because it is null.\n It either already stopped, or wasnt started.");
+
+        StopCoroutine(_rotating);
+        _rotating = null;
+        if (_restorePrevious)
+            _target.localEulerAngles = _previousRotation;
+    }
+
     public IEnumerator Rotating()
     {
+        if (IsRotating)
+        {
+            this.Log($"{gameObject.name} is already rotating. Stop before calling Start again.");
+            yield break;
+        }
+
         IsRotating = true;
 
         do
@@ -63,5 +90,13 @@ public sealed class RotateFeedback : MonoBehaviour
         IsRotating = false;
 
         yield break;
+    }
+
+    public void StopInstantly()
+    {
+        if (_rotating != null) // will be null, if called by Editor Script :c 
+            StopCoroutine(_rotating);
+        IsRotating = false;
+        _target.localEulerAngles = _previousRotation;
     }
 }
