@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
@@ -84,29 +85,50 @@ public sealed class RotateFeedbackEditor : Editor
         bool testPressed = false;
         bool stopTestPressed = false;
 
-        EditorGUILayout.BeginHorizontal();
+        bool testIsRunning = IsTestRunning();
+        
+        using (new HorizontalGroup())
         {
-            bool testIsRunning = IsTestRunning();
-            EditorGUI.BeginDisabledGroup(disabled: testIsRunning);
-            {
+            using (new DisabledGroup(disabled: testIsRunning))
                 testPressed = GUILayout.Button("Test", EditorStyles.miniButtonLeft);
-            }
-            EditorGUI.EndDisabledGroup();
 
-            EditorGUI.BeginDisabledGroup(disabled: !testIsRunning);
-            {
+            using (new DisabledGroup(disabled: !testIsRunning))
                 stopTestPressed = GUILayout.Button("Stop Test", EditorStyles.miniButtonRight);
-            }
-            EditorGUI.EndDisabledGroup();
-
         }
-        EditorGUILayout.EndHorizontal();
 
         if (testPressed) 
             StartTest();
         else if (stopTestPressed)
             StopTest();
+
+        if (testIsRunning)
+            DrawTargetRotationValues();
     }
+    
+    void DrawTargetRotationValues()
+    {
+        using (new DisabledGroup(disabled: true))
+        {
+            EditorGUILayout.Vector3Field("Target", _rotateFeedback.Target.localEulerAngles);
+        }
+
+        //_logInScene = EditorGUILayout.Toggle("Log in Scene", _logInScene);
+        //if (_logInScene)
+        //{
+        //    _labelOffset = EditorGUILayout.Vector3Field("Scene Log Offset", _labelOffset);
+        //}
+    }
+    
+    //bool _logInScene = false;
+    //Vector3 _labelOffset = new Vector3(1.0f, 1.0f, 0.0f);
+    //void OnSceneGUI()
+    //{
+    //    if (_logInScene && IsTestRunning())
+    //    {
+    //        Vector3 labelPosition = _rotateFeedback.Target.position + _labelOffset;
+    //        Handles.Label(labelPosition, $"[{_rotateFeedback.name}] TestRotation: {_rotateFeedback.Target.localEulerAngles}");
+    //    }
+    //}
 
     void StartTest()
     {
@@ -159,5 +181,11 @@ public sealed class RotateFeedbackEditor : Editor
         }
         else
             _rotateFeedback.LogWarning($"Cannot stop test. Not running or already finished");
+    }
+
+    void OnDestroy()
+    {
+        if (IsTestRunning())
+            StopTest();
     }
 }
