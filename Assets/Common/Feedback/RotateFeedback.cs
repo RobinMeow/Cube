@@ -19,9 +19,11 @@ public sealed class RotateFeedback : MonoBehaviour
     [SerializeField] bool _restorePrevious = true;
 
     IEnumerator _rotating = null;
-    Vector3 _previousRotation = Vector3.zero;
+    [HideInInspector]
+    [SerializeField] Vector3 _previousRotation = Vector3.zero;
+    [HideInInspector]
+    [SerializeField] bool _isRotating = false;
 
-    public bool IsRotating { get; private set; }
     public Transform Target { get => _target; }
 
     void Awake()
@@ -47,15 +49,17 @@ public sealed class RotateFeedback : MonoBehaviour
             _target.localEulerAngles = _previousRotation;
     }
 
+    
+
     public IEnumerator Rotating()
     {
-        if (IsRotating)
+        if (_isRotating)
         {
             this.Log($"{gameObject.name} is already rotating. Stop before calling Start again.");
             yield break;
         }
 
-        IsRotating = true;
+        _isRotating = true;
 
         do
         {
@@ -87,16 +91,8 @@ public sealed class RotateFeedback : MonoBehaviour
         } 
         while (_loop);
 
-        IsRotating = false;
+        _isRotating = false;
 
         yield break;
-    }
-
-    public void StopInstantly()
-    {
-        if (_rotating != null) // will be null, if called by Editor Script :c 
-            StopCoroutine(_rotating);
-        IsRotating = false;
-        _target.localEulerAngles = _previousRotation;
     }
 }

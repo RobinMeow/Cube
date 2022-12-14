@@ -454,6 +454,8 @@ MonoBehaviour:
   _duration: 1
   _loop: 1
   _restorePrevious: 1
+  _previousRotation: {x: 0, y: 0, z: 0}
+  _isRotating: 0
 --- !u!1 &1264691954
 GameObject:
   m_ObjectHideFlags: 0

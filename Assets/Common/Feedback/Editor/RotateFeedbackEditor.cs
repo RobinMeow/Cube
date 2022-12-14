@@ -20,10 +20,15 @@ public sealed class RotateFeedbackEditor : Editor
     SerializedProperty _curveXProp = null;
     SerializedProperty _curveYProp = null;
     SerializedProperty _curveZProp = null;
+    SerializedProperty _isRotatingProp = null;
+    SerializedProperty _previousRotationProp = null;
 
     // for Testing 
     EditorCoroutine _testRotation = null;
     EditorCoroutine _startTestCoroutine = null;
+
+    bool IsRotating() => _isRotatingProp.boolValue;
+    Transform Target => (Transform)_targetProp.objectReferenceValue;
 
     void OnEnable()
     {
@@ -35,7 +40,9 @@ public sealed class RotateFeedbackEditor : Editor
         _multipliersProp = serializedObject.FindProperty("_multipliers");
         _curveXProp = serializedObject.FindProperty("_curveX");
         _curveYProp = serializedObject.FindProperty("_curveY");
-        _curveZProp = serializedObject.FindProperty("_curveZ");
+        _curveZProp = serializedObject.FindProperty("_curveZ"); 
+        _isRotatingProp = serializedObject.FindProperty("_isRotating");
+        _previousRotationProp = serializedObject.FindProperty("_previousRotation");
     }
 
     // ToDo:
@@ -118,7 +125,7 @@ public sealed class RotateFeedbackEditor : Editor
         //    _labelOffset = EditorGUILayout.Vector3Field("Scene Log Offset", _labelOffset);
         //}
     }
-    
+
     //bool _logInScene = false;
     //Vector3 _labelOffset = new Vector3(1.0f, 1.0f, 0.0f);
     //void OnSceneGUI()
@@ -144,7 +151,7 @@ public sealed class RotateFeedbackEditor : Editor
                 {
                     yield return WAIT_FOR_NEXT_FRAME;
                     
-                    if (_rotateFeedback.IsRotating)
+                    if (IsRotating())
                         rotationStarted = true;
                 } 
                 while (!rotationStarted);
@@ -153,7 +160,7 @@ public sealed class RotateFeedbackEditor : Editor
                 {
                     yield return WAIT_FOR_NEXT_FRAME;
                 } 
-                while (_rotateFeedback.IsRotating);
+                while (IsRotating());
 
                 _testRotation = null;
                 _startTestCoroutine = null;
@@ -170,20 +177,20 @@ public sealed class RotateFeedbackEditor : Editor
         if (_testRotation != null)
         {
             EditorCoroutineUtility.StopCoroutine(_testRotation);
-            _rotateFeedback.StopInstantly();
             _testRotation = null;
-            
-            if (_startTestCoroutine != null)
-            {
-                EditorCoroutineUtility.StopCoroutine(_startTestCoroutine);
-                _startTestCoroutine = null;
-            }
+            EditorCoroutineUtility.StopCoroutine(_startTestCoroutine);
+            _startTestCoroutine = null;
+
+            // Reset Rotation values 
+            _isRotatingProp.boolValue = false;
+            ((Transform)_targetProp.objectReferenceValue).localEulerAngles = _previousRotationProp.vector3Value;
+            serializedObject.ApplyModifiedProperties();
         }
         else
             _rotateFeedback.LogWarning($"Cannot stop test. Not running or already finished");
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         if (IsTestRunning())
             StopTest();
