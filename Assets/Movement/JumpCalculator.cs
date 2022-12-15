@@ -1,4 +1,5 @@
-using SeedWork.GameLogs;
+using RibynsModules.GameLogger;
+using RibynsModules.GameTimer;
 using System;
 using TMPro;
 using UnityEngine;
@@ -45,7 +46,8 @@ public sealed class JumpCalculator
         if (IsHolding() && !_isJumping) 
         {
             _holdingTime.Tick(Time.deltaTime);
-            _holdJumpPercentage.text = (_holdingTime.CompletedFactor * 100.0f).ToString("00") + " %";
+            float percentageComplete = _holdingTime.GetCompletedFactor() * 100.0f;
+            _holdJumpPercentage.text = $"{percentageComplete:00} %";
 
             DisableGravity();
         }
