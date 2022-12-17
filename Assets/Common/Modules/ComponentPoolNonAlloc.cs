@@ -14,9 +14,11 @@ namespace Common.Modules
 
         void Awake()
         {
+#if UNITY_EDITOR
             Assert.IsTrue(PrefabUtility.IsPartOfPrefabAsset(_component.gameObject), 
                 $"The Component assigned has to be fulfill requirement: '{nameof(PrefabUtility.IsPartOfPrefabAsset)}'." +
                 $"\nBut you still have to drag and drop the actual Component attached to it onto it.");
+#endif
 
             StartCoroutine(InstantiateComponents());
             IEnumerator InstantiateComponents()
