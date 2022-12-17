@@ -33,6 +33,7 @@ public sealed class Movement : MonoBehaviour
     [Header("Ground-Drop / Landing")]
     [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
     [SerializeField] ParticleSystem _groundDropParticleSystem = null;
+    [SerializeField] ParticleSystemPool _groundDropParticles = null;
 
     // Movement 
     JumpCalculator _jumpCalculator = null;
@@ -51,6 +52,7 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
         Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
         Assert.IsNotNull(_groundDropParticleSystem, $"{nameof(Movement)} requires {nameof(_groundDropParticleSystem)}.");
+        Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
 
         _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats, _rigidbody, _holdJumpPercentage);
         _holdJumpPercentage.color = _meshRenderer.material.color;
@@ -99,35 +101,24 @@ public sealed class Movement : MonoBehaviour
 
         _hadGroundHitPreviousFrame = _hasGroundHit;
     }
-
-    IEnumerator _playGroundDropParticles = null;
+    
     private void PlayGroundDropFeedback()
     {
-        if (_playGroundDropParticles == null) // if no one is currently playing 
+        // Paricle
+        StartCoroutine(PlayGroundDropParticles(_groundHit));
+        IEnumerator PlayGroundDropParticles(RaycastHit groundHit)
         {
-            // Paricle
-            _playGroundDropParticles = PlayGroundDropParticles(_groundHit);
-            StartCoroutine(_playGroundDropParticles);
-            IEnumerator PlayGroundDropParticles(RaycastHit groundHit)
-            {
-                _groundDropParticleSystem.Play();
-                Transform groundDropTransform = _groundDropParticleSystem.transform;
-                _groundDropParticleSystem.gameObject.SetActive(true);
-
-                Transform previousParent = groundDropTransform.parent;
-                groundDropTransform.parent = null;
-                groundDropTransform.position = groundHit.point;
-                groundDropTransform.rotation = groundHit.transform.rotation;
+            ParticleSystem groundDropParticleSystem = _groundDropParticles.Get();
+            groundDropParticleSystem.Play();
+            groundDropParticleSystem.transform.SetPositionAndRotation(groundHit.point, groundHit.transform.rotation);
             
-                yield return new WaitForSeconds(_groundDropParticleSystem.main.duration);
-                groundDropTransform.parent = previousParent;
-                groundDropTransform.position = Vector3.zero;
-                _playGroundDropParticles = null;
-            }
-
-            // sound
-            _groundDropFeedbacks.PlayFeedbacks();
+            yield return new WaitForSeconds(groundDropParticleSystem.main.duration);
+                
+            _groundDropParticles.Return(groundDropParticleSystem);
         }
+
+        // sound
+        _groundDropFeedbacks.PlayFeedbacks();
     }
 
     void SetHoldJumpTextPosition()
