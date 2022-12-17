@@ -25,8 +25,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 87080112875192739}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0.000000059604638}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4880,7 +4880,6 @@ GameObject:
   m_Component:
   - component: {fileID: 252446041894613867}
   - component: {fileID: -3328012614077697171}
-  - component: {fileID: 8731177236709520833}
   - component: {fileID: 671348674}
   m_Layer: 0
   m_Name: CubeShooter
@@ -4927,7 +4926,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 671348674}
   _stats: {fileID: 11400000, guid: fe3ff51cad1f92a42b43480e5c21244d, type: 2}
   _jumpStats: {fileID: 11400000, guid: af35fd1e4d0c98a4aa47316a33be2df1, type: 2}
-  _boxCollider: {fileID: 8731177236709520833}
+  _boxCollider: {fileID: 1499208826}
   _useShadowedMovement: 0
   _meshRenderer: {fileID: 7266501342973388228}
   _holdJumpPercentageRectTransform: {fileID: 4724173151374045976}
@@ -4936,21 +4935,9 @@ MonoBehaviour:
   _jumpFeedbacks: {fileID: 712709547479694469}
   _holdJumpPercentage: {fileID: 4319382196933475820}
   _chargedJumpFeedbacks: {fileID: 5346906032292789172}
-  _groundDropFeedbacks: {fileID: 6858965356078814256}
   _chargedJumpFeedbackThresholdFactor: 0.9
---- !u!65 &8731177236709520833
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 184757553702838798}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  _groundDropFeedbacks: {fileID: 6858965356078814256}
+  _groundDropParticleSystem: {fileID: 8755950048160276427}
 --- !u!54 &671348674
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5321,14 +5308,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8418019249260092325}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0.000000059604638}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 252446041894613867}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &8755950048160276427
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5964,7 +5951,7 @@ ParticleSystem:
     radiusThickness: 0
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: -90, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -10177,7 +10164,6 @@ GameObject:
   - component: {fileID: 4458558814515401668}
   - component: {fileID: 6858965356078814256}
   - component: {fileID: 7239561241293922198}
-  - component: {fileID: 7991328239956914695}
   m_Layer: 0
   m_Name: GroundDropFeedbacks
   m_TagString: Untagged
@@ -10214,7 +10200,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Feedbacks:
   - {fileID: 7239561241293922198}
-  - {fileID: 7991328239956914695}
   InitializationMode: 2
   DebugActive: 0
 --- !u!114 &7239561241293922198
@@ -10246,28 +10231,6 @@ MonoBehaviour:
   MinPitch: 1
   MaxPitch: 1
   SfxAudioMixerGroup: {fileID: 0}
---- !u!114 &7991328239956914695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8477154529032544578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c27131831afa28b499cb120fc9059997, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Active: 1
-  Label: Particles Play
-  Timing:
-    InitialDelay: 0
-    CooldownDuration: 0
-    NumberOfRepeats: 0
-    RepeatForever: 0
-    DelayBetweenRepeats: 1
-  DebugActive: 0
-  BoundParticleSystem: {fileID: 8755950048160276427}
 --- !u!1 &8646861262938794494
 GameObject:
   m_ObjectHideFlags: 0
@@ -10279,6 +10242,7 @@ GameObject:
   - component: {fileID: 7177702104536855848}
   - component: {fileID: 8707673707256308318}
   - component: {fileID: 7266501342973388228}
+  - component: {fileID: 1499208826}
   m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
@@ -10351,6 +10315,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1499208826
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8646861262938794494}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8936627848624143976
 GameObject:
   m_ObjectHideFlags: 0

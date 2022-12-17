@@ -1,5 +1,6 @@
 using MoreMountains.Feedbacks;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -27,8 +28,11 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] MMFeedbacks _jumpFeedbacks = null;
     [SerializeField] TextMeshPro _holdJumpPercentage = null;
     [SerializeField] MMFeedbacks _chargedJumpFeedbacks = null;
-    [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
     [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.9f;
+
+    [Header("Ground-Drop / Landing")]
+    [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
+    [SerializeField] ParticleSystem _groundDropParticleSystem = null;
 
     // Movement 
     JumpCalculator _jumpCalculator = null;
@@ -46,6 +50,7 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_holdJumpPercentageRectTransform, $"{nameof(Movement)} requires {nameof(_holdJumpPercentageRectTransform)}.");
         Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
         Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
+        Assert.IsNotNull(_groundDropParticleSystem, $"{nameof(Movement)} requires {nameof(_groundDropParticleSystem)}.");
 
         _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats, _rigidbody, _holdJumpPercentage);
         _holdJumpPercentage.color = _meshRenderer.material.color;
@@ -55,9 +60,12 @@ public sealed class Movement : MonoBehaviour
     {
         _hasGroundHit = CastGroundCheck();
         
+        if (_hasGroundHit)
+            Debug.DrawRay(_groundHit.point, _groundHit.normal, Color.green, 0.1f);
+        
         if (_hasGroundHit && !_hadGroundHitPreviousFrame)
         {
-            _groundDropFeedbacks.PlayFeedbacks();
+            PlayGroundDropFeedback();
         }
 
         Vector3 movementForce = Vector3.zero;
@@ -90,6 +98,36 @@ public sealed class Movement : MonoBehaviour
         SetHoldJumpTextPosition();
 
         _hadGroundHitPreviousFrame = _hasGroundHit;
+    }
+
+    IEnumerator _playGroundDropParticles = null;
+    private void PlayGroundDropFeedback()
+    {
+        if (_playGroundDropParticles == null) // if no one is currently playing 
+        {
+            // Paricle
+            _playGroundDropParticles = PlayGroundDropParticles(_groundHit);
+            StartCoroutine(_playGroundDropParticles);
+            IEnumerator PlayGroundDropParticles(RaycastHit groundHit)
+            {
+                _groundDropParticleSystem.Play();
+                Transform groundDropTransform = _groundDropParticleSystem.transform;
+                _groundDropParticleSystem.gameObject.SetActive(true);
+
+                Transform previousParent = groundDropTransform.parent;
+                groundDropTransform.parent = null;
+                groundDropTransform.position = groundHit.point;
+                groundDropTransform.rotation = groundHit.transform.rotation;
+            
+                yield return new WaitForSeconds(_groundDropParticleSystem.main.duration);
+                groundDropTransform.parent = previousParent;
+                groundDropTransform.position = Vector3.zero;
+                _playGroundDropParticles = null;
+            }
+
+            // sound
+            _groundDropFeedbacks.PlayFeedbacks();
+        }
     }
 
     void SetHoldJumpTextPosition()
@@ -132,7 +170,15 @@ public sealed class Movement : MonoBehaviour
 
         Gizmos.DrawCube(transform.InverseTransformPoint(GetGroundCheckDestination()), GetGroundCheckSize());
 
+
         Gizmos.matrix = prevMatrix;
         Gizmos.color = prevColor;
+
+        DrawGroundDropFeedbackRotation();
+        void DrawGroundDropFeedbackRotation(){
+            Gizmos.color = Color.red;
+            MMFeedbackParticles particle = (MMFeedbackParticles)_groundDropFeedbacks.Feedbacks[1];
+            Gizmos.DrawWireCube(particle.transform.position, particle.transform.lossyScale);
+        }
     }
 }
