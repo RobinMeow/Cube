@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Common.Modules
@@ -17,22 +18,12 @@ namespace Common.Modules
             {
                 for (byte i = 0; i < _instantiationCount; i++)
                 {
-                    Component particleSystem = Instantiate(_component);
-                    Return(particleSystem);
+                    Component component = Instantiate(_component);
+                    Return(component);
                 }
                 yield break;
             }
         }
-
-        //async System.Threading.Tasks.ValueTask InstantiateComponents()
-        //{
-        //    for (byte i = 0; i < _instantiationCount; i++)
-        //    {
-        //        Component particleSystem = Instantiate(_component);
-        //        Return(particleSystem);
-        //    }
-        //    yield break;
-        //}
 
         public T Get<T>() where T : Component
         {
@@ -42,11 +33,11 @@ namespace Common.Modules
             return (T)component;
         }
 
-        public void Return(Component particleSystem)
+        public void Return(Component component)
         {
-            particleSystem.transform.SetParent(transform);
-            particleSystem.gameObject.SetActive(false);
-            _particleSystems.Enqueue(particleSystem);
+            component.transform.SetParent(transform);
+            component.gameObject.SetActive(false);
+            _particleSystems.Enqueue(component);
         }
     } 
 }
