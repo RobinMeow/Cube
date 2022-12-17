@@ -19,7 +19,7 @@ namespace Common.Modules
                 $"The Component assigned has to be fulfill requirement: '{nameof(PrefabUtility.IsPartOfPrefabAsset)}'." +
                 $"\nBut you still have to drag and drop the actual Component attached to it onto it.");
 #endif
-
+            Assert.IsTrue(_instantiationCount > 0, $"{nameof(ComponentPoolNonAlloc)} size of 0 is useless. Might as well, remove it from the scene.");
             StartCoroutine(InstantiateComponents());
             IEnumerator InstantiateComponents()
             {
