@@ -4907,7 +4907,7 @@ Transform:
   - {fileID: 4724173151374045976}
   - {fileID: 4273454378650456867}
   - {fileID: 8012335386459325904}
-  - {fileID: 395302842299030805}
+  - {fileID: 5493466799451424972}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4939,7 +4939,7 @@ MonoBehaviour:
   _chargedJumpFeedbackThresholdFactor: 0.9
   _groundDropFeedbacks: {fileID: 6858965356078814256}
   _groundDropParticleSystem: {fileID: 8755950048160276427}
-  _groundDropParticles: {fileID: 8985558417231509479}
+  _groundDropParticles: {fileID: 6188600947817304586}
 --- !u!54 &671348674
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5058,6 +5058,52 @@ MonoBehaviour:
     DelayBetweenRepeats: 1
   DebugActive: 0
   BoundParticleSystem: {fileID: 1754978055596164559}
+--- !u!1 &5366969026372852624
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5493466799451424972}
+  - component: {fileID: 6188600947817304586}
+  m_Layer: 0
+  m_Name: GroundDropParticleSystemPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5493466799451424972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5366969026372852624}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.4060747, y: -0.073828936, z: -1.5819764}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 252446041894613867}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6188600947817304586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5366969026372852624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e2ee4bc5bff6544f8500dceed0f4f7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _instantiationCount: 8
+  _component: {fileID: 5721962407125168156, guid: 0d2d6e1dc275cba4c8272d9b999589e7, type: 3}
 --- !u!1 &7373453693417935991
 GameObject:
   m_ObjectHideFlags: 0
@@ -10502,80 +10548,3 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5186016619554484618}
   m_maskType: 0
---- !u!1001 &8999036850578099136
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 252446041894613867}
-    m_Modifications:
-    - target: {fileID: 8763835005059471060, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: _instantiationCount
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763835005059471063, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-      propertyPath: m_Name
-      value: GroundDropParticlesObjectPool
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
---- !u!4 &395302842299030805 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8763835005059471061, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-  m_PrefabInstance: {fileID: 8999036850578099136}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8985558417231509479 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 22550519373462567, guid: 179ba79869c965140b5f320f30c5db1d, type: 3}
-  m_PrefabInstance: {fileID: 8999036850578099136}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e2ee4bc5bff6544f8500dceed0f4f7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
