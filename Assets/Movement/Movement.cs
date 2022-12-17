@@ -1,5 +1,5 @@
+using Common.Modules;
 using MoreMountains.Feedbacks;
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -33,7 +33,7 @@ public sealed class Movement : MonoBehaviour
     [Header("Ground-Drop / Landing")]
     [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
     [SerializeField] ParticleSystem _groundDropParticleSystem = null;
-    [SerializeField] ParticleSystemPool _groundDropParticles = null;
+    [SerializeField] ComponentPoolNonAlloc _groundDropParticles = null;
 
     // Movement 
     JumpCalculator _jumpCalculator = null;
@@ -108,7 +108,9 @@ public sealed class Movement : MonoBehaviour
         StartCoroutine(PlayGroundDropParticles(_groundHit));
         IEnumerator PlayGroundDropParticles(RaycastHit groundHit)
         {
-            ParticleSystem groundDropParticleSystem = _groundDropParticles.Get();
+            ParticleSystem getGroundDropParticleSystem() => _groundDropParticles.Get<ParticleSystem>();
+
+            ParticleSystem groundDropParticleSystem = getGroundDropParticleSystem();
             groundDropParticleSystem.Play();
             groundDropParticleSystem.transform.SetPositionAndRotation(groundHit.point, groundHit.transform.rotation);
             
