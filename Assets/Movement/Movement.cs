@@ -163,15 +163,7 @@ public sealed class Movement : MonoBehaviour
 
         Gizmos.DrawCube(transform.InverseTransformPoint(GetGroundCheckDestination()), GetGroundCheckSize());
 
-
         Gizmos.matrix = prevMatrix;
         Gizmos.color = prevColor;
-
-        DrawGroundDropFeedbackRotation();
-        void DrawGroundDropFeedbackRotation(){
-            Gizmos.color = Color.red;
-            MMFeedbackParticles particle = (MMFeedbackParticles)_groundDropFeedbacks.Feedbacks[1];
-            Gizmos.DrawWireCube(particle.transform.position, particle.transform.lossyScale);
-        }
     }
 }

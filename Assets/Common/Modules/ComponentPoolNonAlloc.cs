@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Common.Modules
 {
@@ -13,6 +14,10 @@ namespace Common.Modules
 
         void Awake()
         {
+            Assert.IsTrue(PrefabUtility.IsPartOfPrefabAsset(_component.gameObject), 
+                $"The Component assigned has to be fulfill requirement: '{nameof(PrefabUtility.IsPartOfPrefabAsset)}'." +
+                $"\nBut you still have to drag and drop the actual Component attached to it onto it.");
+
             StartCoroutine(InstantiateComponents());
             IEnumerator InstantiateComponents()
             {
@@ -39,5 +44,5 @@ namespace Common.Modules
             component.gameObject.SetActive(false);
             _particleSystems.Enqueue(component);
         }
-    } 
+    }
 }

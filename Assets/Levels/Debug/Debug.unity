@@ -268,25 +268,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1209774239 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 395302842299030807, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
-  m_PrefabInstance: {fileID: 5018622400170037288}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1209774242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209774239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e2ee4bc5bff6544f8500dceed0f4f7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _instantiationCount: 8
-  _component: {fileID: 5721962407125168156, guid: 0d2d6e1dc275cba4c8272d9b999589e7, type: 3}
 --- !u!1001 &1970876216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -557,15 +538,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.03486953
+      value: 0.034869526
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.0055948645
+      value: 0.005594814
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00019521202
+      value: -0.00019521028
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -649,15 +630,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.03486953
+      value: 0.034869526
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.0055948645
+      value: 0.005594814
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00019521202
+      value: -0.00019521028
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -696,10 +677,6 @@ PrefabInstance:
       propertyPath: _userInputs
       value: 
       objectReference: {fileID: 8256533900086819684}
-    - target: {fileID: -3328012614077697171, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
-      propertyPath: _groundDropParticles
-      value: 
-      objectReference: {fileID: 1209774242}
     - target: {fileID: 184757553702838798, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_Name
       value: CubeShooterOrange
