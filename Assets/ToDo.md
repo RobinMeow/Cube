@@ -13,3 +13,9 @@
         - Jeder gegen jeden, death count (less points on repeated kill, but more points on kill against killer) 
         - Sudden Death 
 - Falling down doesnt kill, but respawn at a specified location. On button press you can leave a visible mark where to respawn. 
+- add optional authentifiaction which, if authenticated, enables storage of cube color, or disables, ads? 
+- put in ads .. 
+- use DI to swap out Multiplayer Solutions 
+- Change POV in settings (or for dev purpose in button) 
+- when a cube falls of the map, a timer the cube has to get back up 
+- a bullet type, that disables jump for a short duration 
