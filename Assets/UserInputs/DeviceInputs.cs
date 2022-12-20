@@ -44,6 +44,15 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Value"",
+                    ""id"": ""f520aab4-343e-4848-ada7-26f3e0ee44e4"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -145,6 +154,61 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""ArrowKeys"",
+                    ""id"": ""b483ca08-5d53-4884-b7f0-f1ed8168e30a"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""711b37be-3ff4-4283-82ba-693667ff375a"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""96f6c590-e9bd-46af-baba-4a19d72f0017"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2768d56f-32e0-462e-8f21-70c64ba02870"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cf81986b-716d-4ac6-b633-97b9b07f44a6"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -155,6 +219,7 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
         m_CubeShooter = asset.FindActionMap("CubeShooter", throwIfNotFound: true);
         m_CubeShooter_Jump = m_CubeShooter.FindAction("Jump", throwIfNotFound: true);
         m_CubeShooter_Move = m_CubeShooter.FindAction("Move", throwIfNotFound: true);
+        m_CubeShooter_Aim = m_CubeShooter.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -216,12 +281,14 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
     private ICubeShooterActions m_CubeShooterActionsCallbackInterface;
     private readonly InputAction m_CubeShooter_Jump;
     private readonly InputAction m_CubeShooter_Move;
+    private readonly InputAction m_CubeShooter_Aim;
     public struct CubeShooterActions
     {
         private @DeviceInputs m_Wrapper;
         public CubeShooterActions(@DeviceInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Jump => m_Wrapper.m_CubeShooter_Jump;
         public InputAction @Move => m_Wrapper.m_CubeShooter_Move;
+        public InputAction @Aim => m_Wrapper.m_CubeShooter_Aim;
         public InputActionMap Get() { return m_Wrapper.m_CubeShooter; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -237,6 +304,9 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnMove;
+                @Aim.started -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnAim;
             }
             m_Wrapper.m_CubeShooterActionsCallbackInterface = instance;
             if (instance != null)
@@ -247,6 +317,9 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
         }
     }
@@ -255,5 +328,6 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
     {
         void OnJump(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

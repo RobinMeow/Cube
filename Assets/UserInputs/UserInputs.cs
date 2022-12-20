@@ -10,6 +10,7 @@ public sealed class UserInputs : MonoBehaviour
     public bool JumpIsPressed { get; private set; }
     public bool JumpWasPressedPreviousFixedUpdate { get; private set; }
     public Vector3 MoveDirection { get; private set; }
+    public Vector3 AimDirection { get; private set; }
 
     void Awake()
     {
@@ -32,19 +33,25 @@ public sealed class UserInputs : MonoBehaviour
     void OnEnable()
     {
         _deviceInputs.Enable();
-        _deviceInputs.CubeShooter.Move.performed += OnMove;
-        _deviceInputs.CubeShooter.Move.canceled += OnMove;
-        _deviceInputs.CubeShooter.Jump.started += OnJump;
-        _deviceInputs.CubeShooter.Jump.canceled += OnJump;
+        _deviceInputs.CubeShooter.Move.performed += SetMove;
+        _deviceInputs.CubeShooter.Move.canceled += SetMove;
+        _deviceInputs.CubeShooter.Jump.started += SetJump;
+        _deviceInputs.CubeShooter.Jump.canceled += SetJump;
+        _deviceInputs.CubeShooter.Aim.performed += SetAim;
     }
 
-    void OnMove(InputAction.CallbackContext context)
+    void SetMove(InputAction.CallbackContext context)
     {
         float x = context.ReadValue<float>();
         MoveDirection = new Vector3(x, 0.0f, 0.0f);
     }
 
-    void OnJump(InputAction.CallbackContext context)
+    void SetAim(InputAction.CallbackContext context)
+    {
+        AimDirection = context.ReadValue<Vector2>();
+    }
+
+    void SetJump(InputAction.CallbackContext context)
     {
         JumpIsPressed = context.started;
     }
@@ -52,9 +59,10 @@ public sealed class UserInputs : MonoBehaviour
     void OnDisable()
     {
         _deviceInputs.Disable();
-        _deviceInputs.CubeShooter.Move.performed -= OnMove;
-        _deviceInputs.CubeShooter.Move.canceled -= OnMove;
-        _deviceInputs.CubeShooter.Jump.started -= OnJump;
-        _deviceInputs.CubeShooter.Jump.canceled -= OnJump;
+        _deviceInputs.CubeShooter.Move.performed -= SetMove;
+        _deviceInputs.CubeShooter.Move.canceled -= SetMove;
+        _deviceInputs.CubeShooter.Jump.started -= SetJump;
+        _deviceInputs.CubeShooter.Jump.canceled -= SetJump;
+        _deviceInputs.CubeShooter.Aim.performed -= SetAim;
     }
 }
