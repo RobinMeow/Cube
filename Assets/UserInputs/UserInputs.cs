@@ -38,6 +38,7 @@ public sealed class UserInputs : MonoBehaviour
         _deviceInputs.CubeShooter.Jump.started += SetJump;
         _deviceInputs.CubeShooter.Jump.canceled += SetJump;
         _deviceInputs.CubeShooter.Aim.performed += SetAim;
+        _deviceInputs.CubeShooter.Aim.canceled += SetAim;
     }
 
     void SetMove(InputAction.CallbackContext context)
@@ -64,5 +65,6 @@ public sealed class UserInputs : MonoBehaviour
         _deviceInputs.CubeShooter.Jump.started -= SetJump;
         _deviceInputs.CubeShooter.Jump.canceled -= SetJump;
         _deviceInputs.CubeShooter.Aim.performed -= SetAim;
+        _deviceInputs.CubeShooter.Aim.canceled -= SetAim;
     }
 }

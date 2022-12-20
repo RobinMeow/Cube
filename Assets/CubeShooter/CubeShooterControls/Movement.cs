@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Assertions;
 
 public sealed class Movement : MonoBehaviour
@@ -78,6 +79,13 @@ public sealed class Movement : MonoBehaviour
             PlayGroundDropFeedback();
         }
 
+        Move();
+
+        _hadGroundHitPreviousFrame = _hasGroundHit;
+    }
+
+    void Move()
+    {
         Vector3 movementForce = Vector3.zero;
         float direction = _userInputs.MoveDirection.x;
         if (_useShadowedMovement)
@@ -106,8 +114,6 @@ public sealed class Movement : MonoBehaviour
         _rigidbody.AddForce(movementForce, ForceMode.Force);
 
         SetHoldJumpTextPosition();
-
-        _hadGroundHitPreviousFrame = _hasGroundHit;
     }
 
     void PlayChargedJumpFeedbacks()

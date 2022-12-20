@@ -263,6 +263,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33684042d3cf9fb478d1c31376f32367, type: 3}
+--- !u!1 &2120328370 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 184757553702838798, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+  m_PrefabInstance: {fileID: 5018622400170037288}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2143865193
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -488,11 +493,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000018222531
+      value: -0.000000018222527
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000013590874
+      value: 0.0000000013590871
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -600,11 +605,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000018222531
+      value: -0.000000018222527
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000013590874
+      value: 0.0000000013590871
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -647,6 +652,10 @@ PrefabInstance:
       propertyPath: _userInputs
       value: 
       objectReference: {fileID: 8256533900086819684}
+    - target: {fileID: 671348674, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+      propertyPath: m_Constraints
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 184757553702838798, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_Name
       value: CubeShooterOrange
@@ -695,6 +704,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 634683239613981356, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+      propertyPath: _userInputs
+      value: 
+      objectReference: {fileID: 8256533900086819684}
     - target: {fileID: 712709547479694469, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -714,6 +727,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 252446041894613867, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
   m_PrefabInstance: {fileID: 5018622400170037288}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5018622400170037293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120328370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a5fd71b5340be74d847d3f428b66e16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _aimingTransform: {fileID: 0}
+  _userInputs: {fileID: 0}
 --- !u!1001 &5531371108718676901
 PrefabInstance:
   m_ObjectHideFlags: 0
