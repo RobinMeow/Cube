@@ -23,13 +23,11 @@ public sealed class Aiming : MonoBehaviour
         if (isAiming)
         {
             Vector2 aimDirection = _userInputs.AimDirection;
-
-            Vector2 aimVisualPosition = aimDirection * 1.25f;
-            _aimingTransform.localPosition = aimVisualPosition;
-
-            float angle = Mathf.Atan2(_userInputs.AimDirection.y, _userInputs.AimDirection.x) * Mathf.Rad2Deg;
+            
+            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
             if (angle < 0)
                 angle += 360; // apperently executes when aiming on Y negativ values 
+            _aimingTransform.Rotate(new Vector3(0.0f, 0.0f, angle), Space.World);
 
             _aimingTransform.localEulerAngles = new Vector3(0.0f, 0.0f, angle - 90.0f);
         }
