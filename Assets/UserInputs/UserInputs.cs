@@ -10,7 +10,7 @@ public sealed class UserInputs : MonoBehaviour
     public bool JumpIsPressed { get; private set; }
     public bool JumpWasPressedPreviousFixedUpdate { get; private set; }
     public Vector3 MoveDirection { get; private set; }
-    public Vector3 AimDirection { get; private set; }
+    public Vector2 AimDirection { get; private set; }
 
     void Awake()
     {
