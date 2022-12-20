@@ -1,5 +1,6 @@
 using Common.Modules;
 using MoreMountains.Feedbacks;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -25,14 +26,20 @@ public sealed class Movement : MonoBehaviour
     bool _hasGroundHit = false;
 
     [Header("Feedbacks")]
-    [SerializeField] MMFeedbacks _jumpFeedbacks = null;
+    [SerializeField] AudioSource _audioSource = null;
     [SerializeField] TextMeshPro _holdJumpPercentage = null;
-    [SerializeField] MMFeedbacks _chargedJumpFeedbacks = null;
     [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.9f;
 
+    [Header("Jump")]
+    [SerializeField] AudioClip _jumpClip = null;
+
+    [Header("Charged Jump")]
+    [SerializeField] AudioClip _chargedJumpClip = null;
+    [SerializeField] ComponentPoolNonAlloc _chargedJumpParticles = null;
+    Vector3 _chargedJumpParticlePositionOffset = new Vector3(0.0f, -0.5f, 0.0f);
+
     [Header("Ground-Drop / Landing")]
-    [SerializeField] MMFeedbacks _groundDropFeedbacks = null;
-    [SerializeField] ParticleSystem _groundDropParticleSystem = null;
+    [SerializeField] AudioClip _groundDropClip = null;
     [SerializeField] ComponentPoolNonAlloc _groundDropParticles = null;
 
     // Movement 
@@ -46,14 +53,15 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_jumpStats, $"{nameof(Movement)} requires {nameof(_jumpStats)}.");
         Assert.IsNotNull(_boxCollider, $"{nameof(Movement)} requires {nameof(_boxCollider)}.");
 
-        Assert.IsNotNull(_jumpFeedbacks, $"{nameof(Movement)} requires {nameof(_jumpFeedbacks)}.");
         Assert.IsNotNull(_holdJumpPercentage, $"{nameof(Movement)} requires {nameof(_holdJumpPercentage)}.");
         Assert.IsNotNull(_holdJumpPercentageRectTransform, $"{nameof(Movement)} requires {nameof(_holdJumpPercentageRectTransform)}.");
-        Assert.IsNotNull(_chargedJumpFeedbacks, $"{nameof(Movement)} requires {nameof(_chargedJumpFeedbacks)}.");
-        Assert.IsNotNull(_groundDropFeedbacks, $"{nameof(Movement)} requires {nameof(_groundDropFeedbacks)}.");
-        Assert.IsNotNull(_groundDropParticleSystem, $"{nameof(Movement)} requires {nameof(_groundDropParticleSystem)}.");
+        Assert.IsNotNull(_audioSource, $"{nameof(Movement)} requires {nameof(_audioSource)}.");
+        Assert.IsNotNull(_groundDropClip, $"{nameof(Movement)} requires {nameof(_groundDropClip)}.");
+        Assert.IsNotNull(_chargedJumpClip, $"{nameof(Movement)} requires {nameof(_chargedJumpClip)}.");
+        Assert.IsNotNull(_jumpClip, $"{nameof(Movement)} requires {nameof(_chargedJumpClip)}.");
         Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
-
+        Assert.IsNotNull(_chargedJumpParticles, $"{nameof(Movement)} requires {nameof(_chargedJumpParticles)}.");
+        
         _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats, _rigidbody, _holdJumpPercentage);
         _holdJumpPercentage.color = _meshRenderer.material.color;
     }
@@ -87,11 +95,11 @@ public sealed class Movement : MonoBehaviour
         {
             if (_jumpCalculator.ThresholdReached(_chargedJumpFeedbackThresholdFactor, calculatedJumpStrength))
             {
-                _chargedJumpFeedbacks.PlayFeedbacks();
+                PlayChargedJumpFeedbacks();
             }
             else
             {
-                _jumpFeedbacks.PlayFeedbacks();
+                _audioSource.PlayOneShot(_jumpClip);
             }
         }
 
@@ -101,26 +109,40 @@ public sealed class Movement : MonoBehaviour
 
         _hadGroundHitPreviousFrame = _hasGroundHit;
     }
-    
-    private void PlayGroundDropFeedback()
+
+    void PlayChargedJumpFeedbacks()
     {
-        // Paricle
-        StartCoroutine(PlayGroundDropParticles(_groundHit));
-        IEnumerator PlayGroundDropParticles(RaycastHit groundHit)
+        StartCoroutine(play());
+        IEnumerator play()
         {
-            ParticleSystem getGroundDropParticleSystem() => _groundDropParticles.Get<ParticleSystem>();
-
-            ParticleSystem groundDropParticleSystem = getGroundDropParticleSystem();
-            groundDropParticleSystem.Play();
-            groundDropParticleSystem.transform.SetPositionAndRotation(groundHit.point, groundHit.transform.rotation);
+            ParticleSystem particleSystem = _chargedJumpParticles.Get<ParticleSystem>();
+            particleSystem.transform.parent = transform;
+            particleSystem.transform.SetPositionAndRotation(transform.position + _chargedJumpParticlePositionOffset, Quaternion.identity);
             
-            yield return new WaitForSeconds(groundDropParticleSystem.main.duration);
-                
-            _groundDropParticles.Return(groundDropParticleSystem);
-        }
+            particleSystem.Play();
+            _audioSource.PlayOneShot(_chargedJumpClip);
 
-        // sound
-        _groundDropFeedbacks.PlayFeedbacks();
+            yield return new WaitForSeconds(particleSystem.main.duration);
+
+            _chargedJumpParticles.Return(particleSystem);
+        }
+    }
+
+    void PlayGroundDropFeedback()
+    {
+        StartCoroutine(play(_groundHit));
+        IEnumerator play(RaycastHit groundHit)
+        {
+            ParticleSystem particleSystem = _groundDropParticles.Get<ParticleSystem>();
+            particleSystem.transform.SetPositionAndRotation(groundHit.point, groundHit.transform.rotation);
+
+            particleSystem.Play();
+            _audioSource.PlayOneShot(_groundDropClip);
+            
+            yield return new WaitForSeconds(particleSystem.main.duration);
+                
+            _groundDropParticles.Return(particleSystem);
+        }
     }
 
     void SetHoldJumpTextPosition()
