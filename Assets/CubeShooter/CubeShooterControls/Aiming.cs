@@ -19,11 +19,10 @@ public sealed class Aiming : MonoBehaviour
 
     void Aim()
     {
-        bool isAiming = _userInputs.AimDirection != Vector2.zero;
+        Vector2 aimDirection = _userInputs.AimDirection;
+        bool isAiming = aimDirection != Vector2.zero;
         if (isAiming)
         {
-            Vector2 aimDirection = _userInputs.AimDirection;
-            
             float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
             if (angle < 0)
                 angle += 360; // apperently executes when aiming on Y negativ values 
