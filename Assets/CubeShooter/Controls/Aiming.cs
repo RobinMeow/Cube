@@ -61,13 +61,11 @@ public sealed class Aiming : MonoBehaviour
 
             if (maxChargeDurationReached())
             {
-                this.Log($"{nameof(maxChargeDurationReached)} + {nameof(OnShotEnd)}");
                 OnShotEnd();
             }
         }
         else if (hasReleasedChargeShotEarly())
         {
-            this.Log($"{nameof(hasReleasedChargeShotEarly)} + {nameof(OnShotEnd)}");
             OnShotEnd();
         }
 

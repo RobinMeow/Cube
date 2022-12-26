@@ -1,81 +1,34 @@
-using RibynsModules;
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Processors;
 
-public sealed class ShadowInputs : BaseInputs
+public sealed class ShadowInputs : UserInputs
 {
-    DeviceInputs _deviceInputs;
-
-    void Awake()
+    protected override void Update()
     {
-        _deviceInputs = new DeviceInputs();
+        base.Update();
+        InvertAim();
     }
 
-    void Start()
+    protected override void SetMove(InputAction.CallbackContext context)
     {
-        StartCoroutine(LateFixedUpdate());
-        IEnumerator LateFixedUpdate()
-        {
-            while (true)
-            {
-                yield return new WaitForFixedUpdate();
-                JumpWasPressedPreviousFixedUpdate = JumpIsPressed;
-            }
-        }
+        base.SetMove(context);
+        Vector2 moveDirection = MoveDirection;
+        moveDirection.x = Invert(moveDirection.x);
+        MoveDirection = moveDirection;
     }
 
-    void OnEnable()
+    protected override void SetAim(InputAction.CallbackContext context)
     {
-        _deviceInputs.Enable();
-        _deviceInputs.CubeShooter.Move.performed += SetMove;
-        _deviceInputs.CubeShooter.Move.canceled += SetMove;
-        _deviceInputs.CubeShooter.Jump.started += SetJump;
-        _deviceInputs.CubeShooter.Jump.canceled += SetJump;
-        _deviceInputs.CubeShooter.Aim.performed += SetAim;
-        _deviceInputs.CubeShooter.Aim.canceled += SetAim;
-        _deviceInputs.CubeShooter.Shoot.started += SetShoot;
-        _deviceInputs.CubeShooter.Shoot.canceled += SetShoot;
+        base.SetAim(context);
+        InvertAim();
     }
 
-    static float invert(float val) => val * -1;
-    void SetMove(InputAction.CallbackContext context)
+    void InvertAim()
     {
-        float x = context.ReadValue<float>();
-        x = invert(x);
-        MoveDirection = new Vector3(x, 0.0f, 0.0f);
-    }
-
-    void SetAim(InputAction.CallbackContext context)
-    {
-        Vector2 inputDirection = context.ReadValue<Vector2>();
-        inputDirection.y = invert(inputDirection.y);
-        inputDirection.x = invert(inputDirection.x);
-        AimDirection = inputDirection;
-    }
-
-    void SetJump(InputAction.CallbackContext context)
-    {
-        JumpIsPressed = context.started;
-    }
-
-    void SetShoot(InputAction.CallbackContext context)
-    {
-        ShootIsPressed = context.started;
-    }
-
-    void OnDisable()
-    {
-        _deviceInputs.Disable();
-        _deviceInputs.CubeShooter.Move.performed -= SetMove;
-        _deviceInputs.CubeShooter.Move.canceled -= SetMove;
-        _deviceInputs.CubeShooter.Jump.started -= SetJump;
-        _deviceInputs.CubeShooter.Jump.canceled -= SetJump;
-        _deviceInputs.CubeShooter.Aim.performed -= SetAim;
-        _deviceInputs.CubeShooter.Aim.canceled -= SetAim;
-        _deviceInputs.CubeShooter.Shoot.started -= SetShoot;
-        _deviceInputs.CubeShooter.Shoot.canceled -= SetShoot;
+        Vector2 aimDirection = AimDirection;
+        aimDirection.x = Invert(aimDirection.x);
+        aimDirection.y = Invert(aimDirection.y);
+        AimDirection = aimDirection;
     }
 }

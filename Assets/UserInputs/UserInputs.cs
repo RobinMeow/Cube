@@ -2,15 +2,21 @@ using RibynsModules;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
-public sealed class UserInputs : BaseInputs
+public class UserInputs : BaseInputs
 {
     DeviceInputs _deviceInputs;
+
+    [Tooltip("Mouse Aiming requires CubeShooter's position, to get the aim, direction.")]
+    [SerializeField] protected bool _useMouseAiming = true;
+    [SerializeField] protected Transform _cubeShooter = null;
 
     void Awake()
     {
         _deviceInputs = new DeviceInputs();
+        Assert.IsTrue(!_useMouseAiming || (_useMouseAiming && _cubeShooter != null)); // since when do I do ninja code? nin-nin °^°
     }
 
     void Start()
@@ -39,15 +45,33 @@ public sealed class UserInputs : BaseInputs
         _deviceInputs.CubeShooter.Shoot.canceled += SetShoot;
     }
 
-    void SetMove(InputAction.CallbackContext context)
+    protected virtual void Update()
+    {
+        if (_useMouseAiming)
+        {
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Vector2 cubeShooterPosition = (Vector2)Camera.main.WorldToScreenPoint(_cubeShooter.position); 
+            Vector2 distance = cubeShooterPosition - mousePosition;
+            Vector2 aimDirection = distance.normalized;
+            aimDirection.x = Invert(aimDirection.x);
+            aimDirection.y = Invert(aimDirection.y);
+            AimDirection = aimDirection;
+        }
+    }
+    protected static float Invert(float val) => val * -1;
+
+    protected override void SetMove(InputAction.CallbackContext context)
     {
         float x = context.ReadValue<float>();
         MoveDirection = new Vector3(x, 0.0f, 0.0f);
     }
 
-    void SetAim(InputAction.CallbackContext context)
+    protected override void SetAim(InputAction.CallbackContext context)
     {
-        AimDirection = context.ReadValue<Vector2>();
+        if (!_useMouseAiming)
+        {
+            AimDirection = context.ReadValue<Vector2>();
+        }
     }
 
     void SetJump(InputAction.CallbackContext context)
