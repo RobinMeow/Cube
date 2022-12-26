@@ -350,7 +350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000013590871
+      value: 0.0000000013590872
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -462,7 +462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000013590871
+      value: 0.0000000013590872
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -505,10 +505,6 @@ PrefabInstance:
       propertyPath: _userInputs
       value: 
       objectReference: {fileID: 8256533900086819684}
-    - target: {fileID: 671348674, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
-      propertyPath: m_Constraints
-      value: 120
-      objectReference: {fileID: 0}
     - target: {fileID: 184757553702838798, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: m_Name
       value: CubeShooterOrange
