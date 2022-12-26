@@ -249,6 +249,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShadowCubeShooter
       objectReference: {fileID: 0}
+    - target: {fileID: 2212165131016127900, guid: 73d168a01ca0fe248bd161d1d4ca0320, type: 3}
+      propertyPath: _userInputs
+      value: 
+      objectReference: {fileID: 8256533900086819684}
     - target: {fileID: 6544431970616672229, guid: 73d168a01ca0fe248bd161d1d4ca0320, type: 3}
       propertyPath: _userInputs
       value: 
@@ -346,11 +350,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000018222527
+      value: -0.000000018231804
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000013590872
+      value: 0.0000000013597791
       objectReference: {fileID: 0}
     - target: {fileID: 4254140016993578540, guid: e61395185d5757f4abf6aae173a0605e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -458,11 +462,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000018222527
+      value: -0.000000018231804
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000013590872
+      value: 0.0000000013597791
       objectReference: {fileID: 0}
     - target: {fileID: 4728901553750362986, guid: b132a48975a45eb479918e478b12a400, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -561,6 +565,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1563250910682482964, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
+      propertyPath: _userInputs
+      value: 
+      objectReference: {fileID: 8256533900086819684}
     - target: {fileID: 1617247832112054346, guid: bcfa2a09930c6b5468f7205a300c54bf, type: 3}
       propertyPath: Active
       value: 0
