@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 
 public sealed class Aiming : MonoBehaviour
 {
-    [SerializeField] UserInputs _userInputs = null;
+    [SerializeField] BaseInputs _inputs = null;
     [SerializeField] Rotator _orbitingCubes = null;
     [SerializeField] FloatReference _maxShotChargeDuration = new FloatReference(1.0f);
     
@@ -19,9 +19,9 @@ public sealed class Aiming : MonoBehaviour
 
     void Awake()
     {
-        Assert.IsNotNull(_userInputs, $"{nameof(_userInputs)} may not be null.");
+        Assert.IsNotNull(_inputs, $"{nameof(_inputs)} may not be null.");
         Assert.IsNotNull(_orbitingCubes, $"{nameof(_orbitingCubes)} may not be null.");
-        Assert.IsNotNull(_userInputs, $"{nameof(_userInputs)} may not be null.");
+        Assert.IsNotNull(_inputs, $"{nameof(_inputs)} may not be null.");
         _chargeTimer = new GameTimer(0.0f, _maxShotChargeDuration);
 
         if (_orbitingCubes.gameObject.activeSelf)
@@ -34,8 +34,8 @@ public sealed class Aiming : MonoBehaviour
     // aim in Update, rather than FixedUpdate, because Movement is in FixedUpdate, which makes the aim visual follow-along the rotation (which is not disred, when not aiming) 
     void Update()
     {
-        if (_userInputs.AimDirection != Vector2.zero)
-            _userAimDirection = _userInputs.AimDirection;
+        if (_inputs.AimDirection != Vector2.zero)
+            _userAimDirection = _inputs.AimDirection;
 
         VisualizeAim(_userAimDirection);
 
@@ -44,7 +44,7 @@ public sealed class Aiming : MonoBehaviour
 
     private void Shoot()
     {
-        bool shootIsPressed = _userInputs.ShootIsPressed;
+        bool shootIsPressed = _inputs.ShootIsPressed;
 
         bool isInitialShootPress() => shootIsPressed && !_shootWasPressedPreviousFrame;
         bool isHoldingChargeShot() => shootIsPressed && _shootWasPressedPreviousFrame;

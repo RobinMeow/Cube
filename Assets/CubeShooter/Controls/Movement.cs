@@ -9,13 +9,12 @@ using UnityEngine.Assertions;
 
 public sealed class Movement : MonoBehaviour
 {
-    [SerializeField] UserInputs _userInputs = null;
+    [SerializeField] BaseInputs _inputs = null;
     [SerializeField] Rigidbody _rigidbody = null;
     [SerializeField] CubeShooterStats _stats = null;
     [SerializeField] JumpStats _jumpStats = null;
     [SerializeField] BoxCollider _boxCollider = null;
 
-    [SerializeField] bool _useShadowedMovement = false;
     [SerializeField] MeshRenderer _meshRenderer = null;
     [SerializeField] RectTransform _holdJumpPercentageRectTransform = null;
     [SerializeField] Vector3 _textPositionOffset = new Vector3(1.488f, -0.3f, -0.56f);
@@ -48,7 +47,7 @@ public sealed class Movement : MonoBehaviour
 
     void Awake()
     {
-        Assert.IsNotNull(_userInputs, $"{nameof(Movement)} requires {nameof(_userInputs)}.");
+        Assert.IsNotNull(_inputs, $"{nameof(Movement)} requires {nameof(_inputs)}.");
         Assert.IsNotNull(_rigidbody, $"{nameof(Movement)} requires {nameof(_rigidbody)}.");
         Assert.IsNotNull(_stats, $"{nameof(Movement)} requires {nameof(_stats)}.");
         Assert.IsNotNull(_jumpStats, $"{nameof(Movement)} requires {nameof(_jumpStats)}.");
@@ -63,7 +62,7 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
         Assert.IsNotNull(_chargedJumpParticles, $"{nameof(Movement)} requires {nameof(_chargedJumpParticles)}.");
         
-        _jumpCalculator = new JumpCalculator(_userInputs, _jumpStats, _rigidbody, _holdJumpPercentage);
+        _jumpCalculator = new JumpCalculator(_inputs, _jumpStats, _rigidbody, _holdJumpPercentage);
         _holdJumpPercentage.color = _meshRenderer.material.color;
     }
 
@@ -87,9 +86,7 @@ public sealed class Movement : MonoBehaviour
     void Move()
     {
         Vector3 movementForce = Vector3.zero;
-        float direction = _userInputs.MoveDirection.x;
-        if (_useShadowedMovement)
-            direction *= -1.0f;
+        float direction = _inputs.MoveDirection.x;
 
         if (direction != 0.0f && !_jumpCalculator.IsHolding())
         {

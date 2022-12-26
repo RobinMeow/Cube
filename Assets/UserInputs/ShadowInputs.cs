@@ -3,8 +3,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Processors;
 
-public sealed class UserInputs : BaseInputs
+public sealed class ShadowInputs : BaseInputs
 {
     DeviceInputs _deviceInputs;
 
@@ -39,15 +40,20 @@ public sealed class UserInputs : BaseInputs
         _deviceInputs.CubeShooter.Shoot.canceled += SetShoot;
     }
 
+    static float invert(float val) => val * -1;
     void SetMove(InputAction.CallbackContext context)
     {
         float x = context.ReadValue<float>();
+        x = invert(x);
         MoveDirection = new Vector3(x, 0.0f, 0.0f);
     }
 
     void SetAim(InputAction.CallbackContext context)
     {
-        AimDirection = context.ReadValue<Vector2>();
+        Vector2 inputDirection = context.ReadValue<Vector2>();
+        inputDirection.y = invert(inputDirection.y);
+        inputDirection.x = invert(inputDirection.x);
+        AimDirection = inputDirection;
     }
 
     void SetJump(InputAction.CallbackContext context)

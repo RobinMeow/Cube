@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 
 public sealed class JumpCalculator 
 {
-    readonly UserInputs _userInputs = null;
+    readonly BaseInputs _inputs = null;
     readonly JumpStats _stats = null;
     readonly Rigidbody _rigidbody;
     readonly TextMeshPro _holdJumpPercentage;
@@ -19,20 +19,20 @@ public sealed class JumpCalculator
     public bool IsJumping { get => _isJumping; }
     //public bool JumpStarted { get; private set; }
 
-    public JumpCalculator(UserInputs userInputs, JumpStats stats, Rigidbody rigidbody, TextMeshPro holdJumpPercentage)
+    public JumpCalculator(BaseInputs inputs, JumpStats stats, Rigidbody rigidbody, TextMeshPro holdJumpPercentage)
     {
-        Assert.IsNotNull(userInputs, $"{nameof(JumpCalculator)} requires {nameof(userInputs)} typeof {nameof(UserInputs)}");
+        Assert.IsNotNull(inputs, $"{nameof(JumpCalculator)} requires {nameof(inputs)} typeof {nameof(UserInputs)}");
         Assert.IsNotNull(stats, $"{nameof(JumpCalculator)} requires {nameof(stats)} typeof {nameof(JumpStats)}");
         Assert.IsNotNull(rigidbody, $"{nameof(JumpCalculator)} requires {nameof(rigidbody)} typeof {nameof(Rigidbody)}");
 
-        _userInputs = userInputs;
+        _inputs = inputs;
         _stats = stats;
         _rigidbody = rigidbody;
         _holdJumpPercentage = holdJumpPercentage;
         _holdingTime = new GameTimer(_stats.MaxAccumulationDurationInSeconds);
     }
 
-    public bool IsHolding() => _userInputs.JumpIsPressed && _userInputs.JumpWasPressedPreviousFixedUpdate;
+    public bool IsHolding() => _inputs.JumpIsPressed && _inputs.JumpWasPressedPreviousFixedUpdate;
 
     /// <summary>
     /// this should be called each frame
@@ -41,7 +41,7 @@ public sealed class JumpCalculator
     {
         float calculatedStrength = 0.0f;
         
-        bool IsReleased() => !_userInputs.JumpIsPressed && _userInputs.JumpWasPressedPreviousFixedUpdate;
+        bool IsReleased() => !_inputs.JumpIsPressed && _inputs.JumpWasPressedPreviousFixedUpdate;
 
         if (IsHolding() && !_isJumping) 
         {
