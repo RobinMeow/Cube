@@ -1,3 +1,4 @@
+using RibynsModules.Variables;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -5,11 +6,12 @@ using UnityEngine.Assertions;
 public sealed class OrbitAround : MonoBehaviour
 {
     [SerializeField] Transform _target = null;
-    [SerializeField] float _speed = 1.0f;
+    [SerializeField] FloatVariable _speed = null;
 
     void Awake()
     {
         Assert.IsNotNull(_target, $"{nameof(_target)} may not be null.");
+        Assert.IsNotNull(_speed, $"{nameof(_speed)} may not be null.");
     }
 
     void FixedUpdate()
