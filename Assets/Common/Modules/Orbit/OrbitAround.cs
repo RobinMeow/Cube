@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 public sealed class OrbitAround : MonoBehaviour
 {
     [SerializeField] Transform _target = null;
-    [SerializeField] FloatVariable _speed = null;
+    [SerializeField] FloatReference _speed = new FloatReference(1.0f);
 
     void Awake()
     {
