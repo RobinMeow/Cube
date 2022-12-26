@@ -9,6 +9,7 @@ public sealed class UserInputs : MonoBehaviour
     DeviceInputs _deviceInputs;
 
     public bool JumpIsPressed { get; private set; }
+    public bool ShootIsPressed { get; private set; }
     public bool JumpWasPressedPreviousFixedUpdate { get; private set; }
     public Vector3 MoveDirection { get; private set; }
     public Vector2 AimDirection { get; private set; }
@@ -40,6 +41,8 @@ public sealed class UserInputs : MonoBehaviour
         _deviceInputs.CubeShooter.Jump.canceled += SetJump;
         _deviceInputs.CubeShooter.Aim.performed += SetAim;
         _deviceInputs.CubeShooter.Aim.canceled += SetAim;
+        _deviceInputs.CubeShooter.Shoot.started += SetShoot;
+        _deviceInputs.CubeShooter.Shoot.canceled += SetShoot;
     }
 
     void SetMove(InputAction.CallbackContext context)
@@ -58,6 +61,11 @@ public sealed class UserInputs : MonoBehaviour
         JumpIsPressed = context.started;
     }
 
+    void SetShoot(InputAction.CallbackContext context)
+    {
+        ShootIsPressed = context.started;
+    }
+
     void OnDisable()
     {
         _deviceInputs.Disable();
@@ -67,5 +75,7 @@ public sealed class UserInputs : MonoBehaviour
         _deviceInputs.CubeShooter.Jump.canceled -= SetJump;
         _deviceInputs.CubeShooter.Aim.performed -= SetAim;
         _deviceInputs.CubeShooter.Aim.canceled -= SetAim;
+        _deviceInputs.CubeShooter.Shoot.started -= SetShoot;
+        _deviceInputs.CubeShooter.Shoot.canceled -= SetShoot;
     }
 }

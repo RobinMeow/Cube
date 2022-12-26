@@ -53,6 +53,15 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5e1abf9-4a5a-402c-bcda-3aa00ee1a6d4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -264,6 +273,28 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a2df0c33-dbcb-452a-ac04-fa1e015d28e9"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b29bacd9-e762-454c-87c5-c7f55b8d76e6"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -275,6 +306,7 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
         m_CubeShooter_Jump = m_CubeShooter.FindAction("Jump", throwIfNotFound: true);
         m_CubeShooter_Move = m_CubeShooter.FindAction("Move", throwIfNotFound: true);
         m_CubeShooter_Aim = m_CubeShooter.FindAction("Aim", throwIfNotFound: true);
+        m_CubeShooter_Shoot = m_CubeShooter.FindAction("Shoot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -337,6 +369,7 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_CubeShooter_Jump;
     private readonly InputAction m_CubeShooter_Move;
     private readonly InputAction m_CubeShooter_Aim;
+    private readonly InputAction m_CubeShooter_Shoot;
     public struct CubeShooterActions
     {
         private @DeviceInputs m_Wrapper;
@@ -344,6 +377,7 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_CubeShooter_Jump;
         public InputAction @Move => m_Wrapper.m_CubeShooter_Move;
         public InputAction @Aim => m_Wrapper.m_CubeShooter_Aim;
+        public InputAction @Shoot => m_Wrapper.m_CubeShooter_Shoot;
         public InputActionMap Get() { return m_Wrapper.m_CubeShooter; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -362,6 +396,9 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                 @Aim.started -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnAim;
+                @Shoot.started -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnShoot;
+                @Shoot.performed -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnShoot;
+                @Shoot.canceled -= m_Wrapper.m_CubeShooterActionsCallbackInterface.OnShoot;
             }
             m_Wrapper.m_CubeShooterActionsCallbackInterface = instance;
             if (instance != null)
@@ -375,6 +412,9 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
             }
         }
     }
@@ -384,5 +424,6 @@ public partial class @DeviceInputs : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
     }
 }

@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: -3328012614077697171}
   - component: {fileID: 671348674}
   - component: {fileID: 4540255335300625469}
-  - component: {fileID: 5443895364330060581}
-  - component: {fileID: 5962841015595684503}
   m_Layer: 0
   m_Name: CubeShooter
   m_TagString: Untagged
@@ -184,86 +182,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5443895364330060581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 184757553702838798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f46576240e13744852325311d7a5f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameEvent: {fileID: 11400000, guid: 899a2e2e07713094480865e69832864b, type: 2}
-  _action:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 794898078688688985}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 7695074180849189041}
-        m_TargetAssemblyTypeName: RibynsModules.Transformers.Rotator, ribynsmodules
-        m_MethodName: StartRotation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &5962841015595684503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 184757553702838798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f46576240e13744852325311d7a5f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameEvent: {fileID: 11400000, guid: 65e516a476fdd99479e1f3a5d3f4a32a, type: 2}
-  _action:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7695074180849189041}
-        m_TargetAssemblyTypeName: RibynsModules.Transformers.Rotator, ribynsmodules
-        m_MethodName: StopRotation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 794898078688688985}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1060786274018604002
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,6 +537,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _userInputs: {fileID: 0}
+  _orbitingCubes: {fileID: 7695074180849189041}
+  _maxShotChargeDuration:
+    UseConstant: 1
+    ConstantValue: 2
+    Variable: {fileID: 0}
 --- !u!1 &8646861262938794494
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,11 +860,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb071f6b518276541bd7bb3b32ef1a33, type: 3}
---- !u!1 &794898078688688985 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4672434148144612141, guid: eb071f6b518276541bd7bb3b32ef1a33, type: 3}
-  m_PrefabInstance: {fileID: 5467327674016970868}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &794898078688688997 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4672434148144612113, guid: eb071f6b518276541bd7bb3b32ef1a33, type: 3}
@@ -952,7 +870,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2384019106651863237, guid: eb071f6b518276541bd7bb3b32ef1a33, type: 3}
   m_PrefabInstance: {fileID: 5467327674016970868}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 794898078688688985}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ddff698a0a22f147b715f9f82cd8c7d, type: 3}
