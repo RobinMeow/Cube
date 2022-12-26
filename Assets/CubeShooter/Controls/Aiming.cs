@@ -11,6 +11,7 @@ public sealed class Aiming : MonoBehaviour
         Assert.IsNotNull(_userInputs, $"{nameof(_userInputs)} may not be null.");
     }
 
+    // aim in Update, rather than FixedUpdate, because Movement is in FixedUpdate, which makes the aim visual follow-along the rotation (which is not disred, when not aiming) 
     void Update()
     {
         if (_userInputs.AimDirection != Vector2.zero)
