@@ -19,3 +19,4 @@
 - Change POV in settings (or for dev purpose in button) 
 - when a cube falls of the map, a timer the cube has to get back up 
 - a bullet type, that disables jump for a short duration 
+- Add size decreasing short range Plane Projectile which pushes only 
