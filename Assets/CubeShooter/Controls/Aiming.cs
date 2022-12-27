@@ -90,7 +90,7 @@ public sealed class Aiming : MonoBehaviour
         _isShooting = false;
 
         Projectile projectile = _projectilePool.GetObject();
-        projectile.Shoot(transform.position, transform.TransformDirection(_inputAimDirection));
+        projectile.Shoot(transform.position, _inputAimDirection, transform.rotation);
     }
 
     void VisualizeAim(Vector2 aimDirection)
