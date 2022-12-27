@@ -13,6 +13,7 @@ public sealed class Aiming : MonoBehaviour
     [SerializeField] Rotator _orbitingCubes = null;
     [SerializeField] FloatReference _maxShotChargeDuration = new FloatReference(1.0f);
     [SerializeField] ProjectilePool _projectilePool = null;
+    [SerializeField] ProjectileStats _projectileStats = null;
 
     Vector2 _inputAimDirection = DefaultDirection;
     GameTimer _chargeTimer = null;
@@ -25,6 +26,7 @@ public sealed class Aiming : MonoBehaviour
         Assert.IsNotNull(_orbitingCubes, $"{nameof(_orbitingCubes)} may not be null.");
         Assert.IsNotNull(_inputs, $"{nameof(_inputs)} may not be null.");
         Assert.IsNotNull(_projectilePool, $"{nameof(_projectilePool)} may not be null.");
+        Assert.IsNotNull(_projectileStats, $"{nameof(_projectileStats)} may not be null.");
         _chargeTimer = new GameTimer(0.0f, _maxShotChargeDuration);
 
         if (_orbitingCubes.gameObject.activeSelf)
@@ -84,13 +86,15 @@ public sealed class Aiming : MonoBehaviour
 
     void OnShotEnd()
     {
+        float compledtedShotChargedFactor = _chargeTimer.GetCompletedFactor();
         _chargeTimer.ResetTime();
         _orbitingCubes.StopRotation();
         _orbitingCubes.gameObject.SetActive(false);
         _isShooting = false;
 
+        AimingProps aim = new AimingProps(_inputAimDirection, transform.position, compledtedShotChargedFactor);
         Projectile projectile = _projectilePool.Get();
-        projectile.Shoot(transform.position, _inputAimDirection);
+        projectile.Shoot(aim, _projectileStats);
     }
 
     void VisualizeAim(Vector2 aimDirection)

@@ -543,6 +543,7 @@ MonoBehaviour:
     ConstantValue: 2
     Variable: {fileID: 0}
   _projectilePool: {fileID: 8571637761989184862}
+  _projectileStats: {fileID: 11400000, guid: 1c3478a5ce2867541a6f3c6ca5d904be, type: 2}
 --- !u!1 &8646861262938794494
 GameObject:
   m_ObjectHideFlags: 0

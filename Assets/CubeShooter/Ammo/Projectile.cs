@@ -1,43 +1,55 @@
-using RibynsModules.Variables;
+using RibynsModules;
+using RibynsModules.GameLogger;
+using System;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public sealed class Projectile : MonoBehaviour
 {
-    [SerializeField] FloatVariable _speed = null;
-    [SerializeField] FloatVariable _lifeTime = null;
+    static readonly GameLogger _logger = new GameLogger("Projectiles");
+#if UNITY_EDITOR
+    static Projectile()
+    {
+        _logger.Subscribe();
+    }
+#endif
 
     bool _isFlying = false;
     Vector2 _flyDirection = Aiming.DefaultDirection;
     float _timeAlive = 0.0f;
+    ProjectileStats _stats = null;
+    AimingProps _aim = default;
 
-    void Awake()
+    public void Shoot(AimingProps aim, ProjectileStats stats)
     {
-        Assert.IsNotNull(_speed, $"{nameof(_speed)} may not be null.");
-        Assert.IsNotNull(_lifeTime, $"{nameof(_lifeTime)} may not be null.");
-    }
+        if (aim.Equals(default(AimingProps)))
+            throw new ArgumentNullException(nameof(stats));
+        if (stats is null) 
+            throw new ArgumentNullException(nameof(stats));
+        _stats = stats;
+        _aim = aim;
 
-    public void Shoot(Vector2 spawnPosition, Vector2 aimDirection)
-    {
         _isFlying = true;
 
-        float angle = RotationHelper.GetDegreeAngleFrom(aimDirection);
+        Vector2 direction = aim.Direction;
+        float angle = RotationHelper.GetDegreeAngleFrom(direction);
 
         transform.SetLocalPositionAndRotation(
-            spawnPosition + aimDirection, 
+            aim.ProjectileStartPosition + direction, 
             Quaternion.Euler(0.0f, 0.0f, angle));
         
-        _flyDirection = aimDirection;
+        _flyDirection = direction;
     }
 
     void FixedUpdate()
     {
         if (_isFlying)
         {
-            transform.Translate(_flyDirection * _speed, Space.World);
+            float speedFactor = _stats.MinSpeed + ((_stats.MaxSpeed - _stats.MinSpeed) * _aim.ChargedShotCompletedFactor);
+            _logger.Log($"{nameof(speedFactor)}: {speedFactor}");
+            transform.Translate(_flyDirection * speedFactor, Space.World);
             _timeAlive += Time.deltaTime;
 
-            if (_timeAlive > _lifeTime)
+            if (_timeAlive > _stats.LifeTime)
             {
                 ReturnToPool();
             }
