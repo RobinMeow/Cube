@@ -12,7 +12,7 @@ public sealed class Aiming : MonoBehaviour
     [SerializeField] BaseInputs _inputs = null;
     [SerializeField] Rotator _orbitingCubes = null;
     [SerializeField] FloatReference _maxShotChargeDuration = new FloatReference(1.0f);
-    [SerializeField] ObjectPool<Projectile> _projectilePool = null;
+    [SerializeField] ProjectilePool _projectilePool = null;
 
     Vector2 _inputAimDirection = DefaultDirection;
     GameTimer _chargeTimer = null;
@@ -89,8 +89,8 @@ public sealed class Aiming : MonoBehaviour
         _orbitingCubes.gameObject.SetActive(false);
         _isShooting = false;
 
-        Projectile projectile = _projectilePool.GetObject();
-        projectile.Shoot(transform.position, _inputAimDirection, transform.rotation);
+        Projectile projectile = _projectilePool.Get();
+        projectile.Shoot(transform.position, _inputAimDirection);
     }
 
     void VisualizeAim(Vector2 aimDirection)

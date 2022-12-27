@@ -1,16 +1,23 @@
-using RibynsModules;
+using RibynsModules.Variables;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public sealed class Projectile : PooledObject
+public sealed class Projectile : MonoBehaviour
 {
-    [SerializeField] float _speed = 0.1f;
-    [SerializeField] float _lifeTime = 2.5f;
+    [SerializeField] FloatVariable _speed = null;
+    [SerializeField] FloatVariable _lifeTime = null;
 
     bool _isFlying = false;
     Vector2 _flyDirection = Aiming.DefaultDirection;
     float _timeAlive = 0.0f;
 
-    public void Shoot(Vector2 spawnPosition, Vector2 aimDirection, Quaternion rotation)
+    void Awake()
+    {
+        Assert.IsNotNull(_speed, $"{nameof(_speed)} may not be null.");
+        Assert.IsNotNull(_lifeTime, $"{nameof(_lifeTime)} may not be null.");
+    }
+
+    public void Shoot(Vector2 spawnPosition, Vector2 aimDirection)
     {
         _isFlying = true;
 
@@ -32,8 +39,21 @@ public sealed class Projectile : PooledObject
 
             if (_timeAlive > _lifeTime)
             {
-                //ReturnToPool();
+                ReturnToPool();
             }
         }
     }
+
+    #region ObjectPool 
+
+    public ProjectilePool ProjectilePool { get; set; }
+
+    public void ReturnToPool()
+    {
+        _isFlying = false;
+        _timeAlive = 0.0f;
+        ProjectilePool.Return(this);
+    }
+
+    #endregion
 }
