@@ -11,6 +11,8 @@ public sealed class Projectile : MonoBehaviour
         _logger.Subscribe();
     }
 
+    [SerializeField] Rigidbody _rigidbody = null;
+
     bool _isFlying = false;
     Vector2 _flyDirection = Aiming.DefaultDirection;
     float _timeAlive = 0.0f;
@@ -44,13 +46,21 @@ public sealed class Projectile : MonoBehaviour
         {
             float speedFactor = _stats.MinSpeed + ((_stats.MaxSpeed - _stats.MinSpeed) * _aim.ChargedShotCompletedFactor);
             _logger.Log($"{nameof(speedFactor)}: {speedFactor}");
-            transform.Translate(_flyDirection * speedFactor, Space.World);
+            _rigidbody.MovePosition((Vector2)transform.position + (_flyDirection * speedFactor));
             _timeAlive += Time.deltaTime;
 
             if (_timeAlive > _stats.LifeTime)
             {
                 ReturnToPool();
             }
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent<Projectile>(out _))
+        {
+            ReturnToPool();
         }
     }
 

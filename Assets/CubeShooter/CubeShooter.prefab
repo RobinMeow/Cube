@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -3328012614077697171}
   - component: {fileID: 671348674}
   - component: {fileID: 4540255335300625469}
+  - component: {fileID: 7504337810825327270}
   m_Layer: 0
   m_Name: CubeShooter
   m_TagString: Untagged
@@ -181,6 +182,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7504337810825327270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184757553702838798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6f057970786507438eab3b6f972aac6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _deadCubeShooters: {fileID: 11400000, guid: 8fd76d7af83aa574c96ee8e7609c097c, type: 2}
+  _cubeRenderer: {fileID: 7266501342973388228}
 --- !u!1 &1060786274018604002
 GameObject:
   m_ObjectHideFlags: 0
