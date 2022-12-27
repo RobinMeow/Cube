@@ -8,6 +8,9 @@ public sealed class CubeShooter : MonoBehaviour
 {
     [SerializeField] CubeShooterRuntimeSet _deadCubeShooters = null;
     [SerializeField] Renderer _cubeRenderer = null;
+    [SerializeField] float _alphaOnInvincibility = 0.5f;
+    [SerializeField] Color _color = Color.grey;
+
     bool _isInvincible = false;
     Color _invincibleColor = default;
     Color _vulnerableColor = default;
@@ -16,11 +19,17 @@ public sealed class CubeShooter : MonoBehaviour
     {
         Assert.IsNotNull(_deadCubeShooters, $"{nameof(_deadCubeShooters)} may not be null.");
         Assert.IsNotNull(_cubeRenderer, $"{nameof(_cubeRenderer)} may not be null.");
-        Color invincColor = _cubeRenderer.material.color;
-        invincColor.a = 0.2f;
-        _invincibleColor = invincColor;
-        _vulnerableColor = _cubeRenderer.material.color;
+        SetColors();
         RegisterAsDead();
+    }
+
+    void SetColors()
+    {
+        _vulnerableColor = _color;
+        _cubeRenderer.material.color = _color;
+        Color invincColor = _color;
+        invincColor.a = _alphaOnInvincibility;
+        _invincibleColor = invincColor;
     }
 
     void OnCollisionEnter(Collision collision)
