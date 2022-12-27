@@ -2,17 +2,20 @@ using RibynsModules;
 using RibynsModules.GameTimer;
 using RibynsModules.Transformers;
 using RibynsModules.Variables;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 public sealed class Aiming : MonoBehaviour
 {
+    public static Vector2 DefaultDirection => Vector2.up;
+
     [SerializeField] BaseInputs _inputs = null;
     [SerializeField] Rotator _orbitingCubes = null;
     [SerializeField] FloatReference _maxShotChargeDuration = new FloatReference(1.0f);
-    
-    Vector2 _userAimDirection = Vector2.up;
+    [SerializeField] ProjectilePool _projectilePool = null;
+    [SerializeField] ProjectileStats _projectileStats = null;
+
+    Vector2 _inputAimDirection = DefaultDirection;
     GameTimer _chargeTimer = null;
     bool _shootWasPressedPreviousFrame = false;
     bool _isShooting = false;
@@ -22,6 +25,8 @@ public sealed class Aiming : MonoBehaviour
         Assert.IsNotNull(_inputs, $"{nameof(_inputs)} may not be null.");
         Assert.IsNotNull(_orbitingCubes, $"{nameof(_orbitingCubes)} may not be null.");
         Assert.IsNotNull(_inputs, $"{nameof(_inputs)} may not be null.");
+        Assert.IsNotNull(_projectilePool, $"{nameof(_projectilePool)} may not be null.");
+        Assert.IsNotNull(_projectileStats, $"{nameof(_projectileStats)} may not be null.");
         _chargeTimer = new GameTimer(0.0f, _maxShotChargeDuration);
 
         if (_orbitingCubes.gameObject.activeSelf)
@@ -35,9 +40,9 @@ public sealed class Aiming : MonoBehaviour
     void Update()
     {
         if (_inputs.AimDirection != Vector2.zero)
-            _userAimDirection = _inputs.AimDirection;
+            _inputAimDirection = _inputs.AimDirection;
 
-        VisualizeAim(_userAimDirection);
+        VisualizeAim(_inputAimDirection);
 
         Shoot();
     }
@@ -81,18 +86,20 @@ public sealed class Aiming : MonoBehaviour
 
     void OnShotEnd()
     {
+        float compledtedShotChargedFactor = _chargeTimer.GetCompletedFactor();
         _chargeTimer.ResetTime();
         _orbitingCubes.StopRotation();
         _orbitingCubes.gameObject.SetActive(false);
         _isShooting = false;
+
+        AimingProps aim = new AimingProps(_inputAimDirection, transform.position, compledtedShotChargedFactor);
+        Projectile projectile = _projectilePool.Get();
+        projectile.Shoot(aim, _projectileStats);
     }
 
     void VisualizeAim(Vector2 aimDirection)
     {
-        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-        if (angle < 0)
-            angle += 360; // apperently executes when aiming on Y negativ values 
-
+        float angle = RotationHelper.GetDegreeAngleFrom(aimDirection);
         transform.eulerAngles = new Vector3(0.0f, 0.0f, angle - 90.0f); // prolly better to rotate the go by 90° lol
     }
 }
