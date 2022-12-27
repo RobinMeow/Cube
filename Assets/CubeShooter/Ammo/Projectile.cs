@@ -13,10 +13,8 @@ public sealed class Projectile : PooledObject
     public void Shoot(Vector2 spawnPosition, Vector2 aimDirection, Quaternion rotation)
     {
         _isFlying = true;
-        
-        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-        if (angle < 0)
-            angle += 360; // apperently executes when aiming on Y negativ values 
+
+        float angle = RotationHelper.GetDegreeAngleFrom(aimDirection);
 
         transform.SetLocalPositionAndRotation(
             spawnPosition + aimDirection, 

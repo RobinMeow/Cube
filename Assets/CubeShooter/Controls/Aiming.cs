@@ -95,10 +95,7 @@ public sealed class Aiming : MonoBehaviour
 
     void VisualizeAim(Vector2 aimDirection)
     {
-        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-        if (angle < 0)
-            angle += 360; // apperently executes when aiming on Y negativ values 
-
+        float angle = RotationHelper.GetDegreeAngleFrom(aimDirection);
         transform.eulerAngles = new Vector3(0.0f, 0.0f, angle - 90.0f); // prolly better to rotate the go by 90° lol
     }
 }
