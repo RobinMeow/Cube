@@ -415,7 +415,7 @@ GameObject:
   - component: {fileID: 4672434148144612113}
   - component: {fileID: 2384019106651863237}
   m_Layer: 0
-  m_Name: AmmoVisuals
+  m_Name: OrbitingAmmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
