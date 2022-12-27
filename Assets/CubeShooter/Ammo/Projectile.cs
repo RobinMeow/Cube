@@ -6,12 +6,10 @@ using UnityEngine;
 public sealed class Projectile : MonoBehaviour
 {
     static readonly GameLogger _logger = new GameLogger("Projectiles");
-#if UNITY_EDITOR
     static Projectile()
     {
         _logger.Subscribe();
     }
-#endif
 
     bool _isFlying = false;
     Vector2 _flyDirection = Aiming.DefaultDirection;
