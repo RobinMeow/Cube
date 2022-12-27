@@ -4,8 +4,7 @@ using UnityEngine;
 public abstract class ObjectPool<T> : MonoBehaviour where T : PooledObject
 {
     [SerializeField] protected GameObject _prefab;
-
-    Queue<T> _inactiveObjects = new Queue<T>();
+    readonly Queue<T> _inactiveObjects = new Queue<T>();
 
     public T GetObject()
     {
