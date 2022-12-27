@@ -854,7 +854,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4672434148144612141, guid: eb071f6b518276541bd7bb3b32ef1a33, type: 3}
       propertyPath: m_Name
-      value: Ammo
+      value: AmmoVisuals
       objectReference: {fileID: 0}
     - target: {fileID: 4672434148144612141, guid: eb071f6b518276541bd7bb3b32ef1a33, type: 3}
       propertyPath: m_IsActive
