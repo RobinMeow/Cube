@@ -83,7 +83,7 @@ public sealed class JumpCalculator
         _rigidbody.velocity = Vector3.zero;
     }
 
-    private float CalculateAdditionalStrength(float maximum)
+    float CalculateAdditionalStrength(float maximum)
     {
         return (maximum / _stats.AccumulationStepInSeconds) * _stats.AccumulatingStrength;
     }
