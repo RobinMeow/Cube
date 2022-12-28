@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 
 public sealed class Movement : MonoBehaviour
 {
@@ -24,7 +25,8 @@ public sealed class Movement : MonoBehaviour
 
     [Header("Feedbacks")]
     [SerializeField] AudioSource _audioSource = null;
-    [SerializeField] TextMeshPro _holdJumpPercentage = null;
+    [FormerlySerializedAs("_holdJumpPercentage")]
+    [SerializeField] TextMeshPro _tmProJumpChargePercentage = null;
     [SerializeField] float _chargedJumpFeedbackThresholdFactor = 0.9f;
 
     [Header("Jump")]
@@ -50,7 +52,7 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_jumpStats, $"{nameof(Movement)} requires {nameof(_jumpStats)}.");
         Assert.IsNotNull(_boxCollider, $"{nameof(Movement)} requires {nameof(_boxCollider)}.");
 
-        Assert.IsNotNull(_holdJumpPercentage, $"{nameof(Movement)} requires {nameof(_holdJumpPercentage)}.");
+        Assert.IsNotNull(_tmProJumpChargePercentage, $"{nameof(Movement)} requires {nameof(_tmProJumpChargePercentage)}.");
         Assert.IsNotNull(_holdJumpPercentageRectTransform, $"{nameof(Movement)} requires {nameof(_holdJumpPercentageRectTransform)}.");
         Assert.IsNotNull(_audioSource, $"{nameof(Movement)} requires {nameof(_audioSource)}.");
         Assert.IsNotNull(_groundDropClip, $"{nameof(Movement)} requires {nameof(_groundDropClip)}.");
@@ -59,8 +61,8 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
         Assert.IsNotNull(_chargedJumpParticles, $"{nameof(Movement)} requires {nameof(_chargedJumpParticles)}.");
         
-        _jumpCalculator = new JumpCalculator(_inputs, _jumpStats, _rigidbody, _holdJumpPercentage);
-        _holdJumpPercentage.color = _meshRenderer.material.color;
+        _jumpCalculator = new JumpCalculator(_jumpStats);
+        _tmProJumpChargePercentage.color = _meshRenderer.material.color;
     }
 
     void FixedUpdate()
@@ -85,15 +87,19 @@ public sealed class Movement : MonoBehaviour
         Vector3 movementForce = Vector3.zero;
         float direction = _inputs.MoveDirection.x;
 
-        if (direction != 0.0f && !_jumpCalculator.IsHolding())
+        if (direction != 0.0f && !_jumpCalculator.IsCharging)
         {
             movementForce.x = _stats.FloatStrength * direction;
         }
 
-        float calculatedJumpStrength = _jumpCalculator.Calculate();
+        float calculatedJumpStrength = _jumpCalculator.Calculate(_inputs.JumpIsPressed, _inputs.JumpWasPressedPreviousFixedUpdate, out float percentageComplete);
+        if (percentageComplete != 0.0f)
+            _tmProJumpChargePercentage.text = $"{percentageComplete:00} %";
+        
         movementForce.y = calculatedJumpStrength;
-
-        if (_jumpCalculator.IsJumping)
+        bool isChargingJump = calculatedJumpStrength > 0.0f;
+        bool isProbablyJumping = movementForce.y > 0.0f && isChargingJump;
+        if (isProbablyJumping)
         {
             if (_jumpCalculator.ThresholdReached(_chargedJumpFeedbackThresholdFactor, calculatedJumpStrength))
             {
@@ -103,6 +109,21 @@ public sealed class Movement : MonoBehaviour
             {
                 _audioSource.PlayOneShot(_jumpClip);
             }
+        }
+
+        if (isChargingJump && _rigidbody.useGravity)
+        {
+            // disable gravity 
+            _rigidbody.useGravity = false;
+            _rigidbody.velocity = Vector3.zero;
+        }
+        else if (!isChargingJump && !_rigidbody.useGravity)
+        {
+            // re-enable gravity 
+            _rigidbody.useGravity = true;
+
+            // blend out text mesh pro
+            _tmProJumpChargePercentage.text = String.Empty;
         }
 
         _rigidbody.AddForce(movementForce, ForceMode.Force);
