@@ -1,10 +1,8 @@
 using Common.Modules;
-using MoreMountains.Feedbacks;
 using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 
@@ -99,11 +97,11 @@ public sealed class Movement : MonoBehaviour
         if (percentageComplete != 0.0f)
             _tmProJumpChargePercentage.text = $"{percentageComplete:00} %";
         
-        movementForce.y = calculatedJumpStrength;
         bool isChargingJump = calculatedJumpStrength > 0.0f;
-        bool isProbablyJumping = movementForce.y > 0.0f && isChargingJump;
-        if (isProbablyJumping)
+        bool isJumping = _inputs.JumpWasPressedPreviousFixedUpdate && !_inputs.JumpIsPressed;
+        if (isJumping)
         {
+            movementForce.y = calculatedJumpStrength;
             if (ChargedJumpFeedbackThresholdReached(calculatedJumpStrength))
             {
                 PlayChargedJumpFeedbacks();
@@ -113,8 +111,7 @@ public sealed class Movement : MonoBehaviour
                 _audioSource.PlayOneShot(_jumpClip);
             }
         }
-
-        if (isChargingJump && _rigidbody.useGravity)
+        else if (isChargingJump && _rigidbody.useGravity)
         {
             // disable gravity 
             _rigidbody.useGravity = false;

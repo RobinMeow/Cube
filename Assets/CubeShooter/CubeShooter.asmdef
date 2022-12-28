@@ -1,0 +1,19 @@
+{
+    "name": "CubeShooter",
+    "rootNamespace": "",
+    "references": [
+        "GUID:abe3aee6fa5886a42a11276e9580cd84",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:215300eeaf4c5a54c82c17b4b85210b3",
+        "GUID:bb9d2f0e4d42b334d9dfaefb1f4fd687"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
