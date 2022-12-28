@@ -36,18 +36,28 @@ public sealed class JumpCalculator
         bool hasStartedPressingDownJumpButton() => jumpIsPressed && !jumpWasPressedPreviousFixedUpdate;
         bool isHoldingDownJumpButton() => jumpIsPressed && jumpWasPressedPreviousFixedUpdate;
 
-        if (hasStartedPressingDownJumpButton() || isHoldingDownJumpButton()) 
+        if (hasStartedPressingDownJumpButton()) 
+        {
+            _isCharging = true;
+            calculatedStrength = _stats.InitialStrength;
+            percentageComplete = 0.0f;
+        }
+        else if (isHoldingDownJumpButton() && _isCharging)
         {
             _holdingTime.Tick(Time.deltaTime);
+            float additionalStrength = CalculateAdditionalStrength(_holdingTime.Current);
+            calculatedStrength = _stats.InitialStrength + additionalStrength;
             percentageComplete = _holdingTime.GetCompletedFactor() * 100.0f;
         }
-        else if (hasReleasedJumpButton() && !_isCharging) 
+        else if (hasReleasedJumpButton() && _isCharging) 
         {
             float additionalStrength = CalculateAdditionalStrength(_holdingTime.Current);
             calculatedStrength = _stats.InitialStrength + additionalStrength;
+            percentageComplete = _holdingTime.GetCompletedFactor() * 100.0f;
+
+            _isCharging = false;
             _holdingTime.ResetTime();
             _logger.Log($"{nameof(hasReleasedJumpButton)} calcedStrength: {calculatedStrength}");
-            _isCharging = true;
         }
         else
         {
