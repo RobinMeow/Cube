@@ -98,7 +98,7 @@ public sealed class Movement : MonoBehaviour
             _tmProJumpChargePercentage.text = $"{percentageComplete:00} %";
         
         bool isChargingJump = calculatedJumpStrength > 0.0f;
-        bool isJumping = percentageComplete == 100.0f;
+        bool isJumping = _inputs.JumpWasPressedPreviousFixedUpdate && !_inputs.JumpIsPressed;
         if (isJumping)
         {
             movementForce.y = calculatedJumpStrength;

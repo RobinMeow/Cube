@@ -45,7 +45,7 @@ public sealed class JumpCalculator
         else if (isHoldingDownJumpButton() && _isCharging)
         {
             _chargeTime.Tick(Time.deltaTime);
-            float additionalStrength = CalculateAdditionalStrength(_holdingTime.Current);
+            float additionalStrength = CalculateAdditionalStrength();
             calculatedStrength = _stats.InitialStrength + additionalStrength;
             percentageComplete = _chargeTime.GetCompletedFactor() * 100.0f;
         }
@@ -53,7 +53,7 @@ public sealed class JumpCalculator
         {
             float additionalStrength = CalculateAdditionalStrength();
             calculatedStrength = _stats.InitialStrength + additionalStrength;
-            percentageComplete = _holdingTime.GetCompletedFactor() * 100.0f;
+            percentageComplete = _chargeTime.GetCompletedFactor() * 100.0f;
 
             _isCharging = false;
             _chargeTime.ResetTime();

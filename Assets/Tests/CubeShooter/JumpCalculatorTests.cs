@@ -45,9 +45,6 @@ public sealed class JumpCalculatorTests : BaseTests
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); 
         JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
 
-        jumpStats.AccumulationStepInSeconds = 0.0001f;
-        jumpStats.MaxAccumulationDurationInSeconds = 0.1f; // just to make the test quicker c: 
-
         float percentageComplete = 0.0f;
         // Act
 
@@ -163,8 +160,6 @@ public sealed class JumpCalculatorTests : BaseTests
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
         JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
 
-        jumpStats.AccumulationStepInSeconds = 0.0001f; // make sure, on frame skip is enough
-
         // Act
         
         // initial press
@@ -184,9 +179,7 @@ public sealed class JumpCalculatorTests : BaseTests
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
         JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
         
-        jumpStats.AccumulationStepInSeconds = 0.0001f; // make sure, on frame skip is enough
-
-        float maxPossibleJumpStrength = jumpStats.InitialStrength + (jumpStats.MaxAccumulationDurationInSeconds / jumpStats.AccumulationStepInSeconds * jumpStats.AccumulatingStrength);
+        float maxPossibleJumpStrength = jumpStats.InitialStrength + jumpStats.MaxChargedAdditionalStrength;
 
         // Act
 
