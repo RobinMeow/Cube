@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 public sealed class JumpCalculator 
 {
     readonly JumpStats _stats = null;
-    readonly GameTimer _holdingTime = null;
+    readonly GameTimer _chargeTime = null;
     static GameLogger _loggerInstance = new GameLogger("JumpCalculator");
     static GameLogger _logger => _loggerInstance;
     bool _isCharging = false;
@@ -21,7 +21,7 @@ public sealed class JumpCalculator
         Assert.IsNotNull(stats, $"{nameof(stats)} may not be null");
 
         _stats = stats;
-        _holdingTime = new GameTimer(stats.MaxAccumulationDurationInSeconds);
+        _chargeTime = new GameTimer(stats.MaxChargeDurationInSeconds);
     }
 
     /// <summary>
@@ -38,14 +38,14 @@ public sealed class JumpCalculator
 
         if (hasStartedPressingDownJumpButton() || isHoldingDownJumpButton()) 
         {
-            _holdingTime.Tick(Time.deltaTime);
-            percentageComplete = _holdingTime.GetCompletedFactor() * 100.0f;
+            _chargeTime.Tick(Time.deltaTime);
+            percentageComplete = _chargeTime.GetCompletedFactor() * 100.0f;
         }
         else if (hasReleasedJumpButton() && !_isCharging) 
         {
-            float additionalStrength = CalculateAdditionalStrength(_holdingTime.Current);
+            float additionalStrength = CalculateAdditionalStrength();
             calculatedStrength = _stats.InitialStrength + additionalStrength;
-            _holdingTime.ResetTime();
+            _chargeTime.ResetTime();
             _logger.Log($"{nameof(hasReleasedJumpButton)} calcedStrength: {calculatedStrength}");
             _isCharging = true;
         }
@@ -57,16 +57,8 @@ public sealed class JumpCalculator
         return calculatedStrength;
     }
 
-    float CalculateAdditionalStrength(float maximum)
+    float CalculateAdditionalStrength()
     {
-        return (maximum / _stats.AccumulationStepInSeconds) * _stats.AccumulatingStrength;
-    }
-
-    public bool ThresholdReached(float chargedJumpFeedbackThresholdFactor, float calculatedJumpStrength)
-    {
-        float maxPossibleStrength = CalculateAdditionalStrength(_stats.MaxAccumulationDurationInSeconds) + _stats.InitialStrength;
-        float threshold = maxPossibleStrength * chargedJumpFeedbackThresholdFactor;
-        _logger.Log($"maxPossibleStrength '{maxPossibleStrength}' | calcedStrength '{calculatedJumpStrength}' > 'threshold '{threshold}'");
-        return calculatedJumpStrength > threshold; 
+        return _chargeTime.GetCompletedFactor() * _stats.MaxChargedAdditionalStrength;
     }
 }
