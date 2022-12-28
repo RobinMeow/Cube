@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using UnityEngine.TestTools.Utils;
 
 public sealed class JumpCalculatorTests : BaseTests
 {
@@ -201,5 +199,41 @@ public sealed class JumpCalculatorTests : BaseTests
 
         // Assert
         Assert.That(maxPossibleJumpStrength, Is.EqualTo(jumpStrength).Using(FloatComparer));
+    }
+
+    [UnityTest]
+    public IEnumerator isCharging_is_true_while_charging()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
+        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
+
+        // Act
+        float percentageComplete = 0.0f;
+        // Act
+
+        // initial jump press
+        _ = jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out _);
+        do
+        {
+            // holding jump
+            yield return SKIP_FRAME;
+            _ = jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: true, out percentageComplete);
+        }
+        while (percentageComplete == 0.0f);
+
+        // Assert
+        Assert.That(jumpCalculator.IsCharging, Is.EqualTo(true));
+    }
+
+    [Test]
+    public void isCharging_is_false_while_not_charging()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
+        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
+
+        // Assert
+        Assert.That(jumpCalculator.IsCharging, Is.EqualTo(false));
     }
 }
