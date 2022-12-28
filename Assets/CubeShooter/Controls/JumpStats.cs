@@ -9,11 +9,8 @@ public sealed class JumpStats : ScriptableObject
 
     [field: SerializeField]
     [Tooltip("The amount of force which is applied additionaly to the initial force, per accumulation step.")]
-    public float AccumulatingStrength { get; set; } = 12500.0f;
+    public float MaxChargedAdditionalStrength { get; set; } = 12500.0f;
 
     [field: SerializeField]
-    public float AccumulationStepInSeconds { get; set; } = 0.2f;
-
-    [field: SerializeField]
-    public float MaxAccumulationDurationInSeconds { get; set; } = 0.5f;
+    public float MaxChargeDurationInSeconds { get; set; } = 0.5f;
 }

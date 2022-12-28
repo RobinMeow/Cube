@@ -102,7 +102,7 @@ public sealed class Movement : MonoBehaviour
         if (isJumping)
         {
             movementForce.y = calculatedJumpStrength;
-            if (_jumpCalculator.ThresholdReached(_chargedJumpFeedbackThresholdFactor, calculatedJumpStrength))
+            if (ChargedJumpFeedbackThresholdReached(calculatedJumpStrength))
             {
                 PlayChargedJumpFeedbacks();
             }
@@ -129,6 +129,13 @@ public sealed class Movement : MonoBehaviour
         _rigidbody.AddForce(movementForce, ForceMode.Force);
 
         SetHoldJumpTextPosition();
+    }
+
+    bool ChargedJumpFeedbackThresholdReached(float calculatedJumpStrength)
+    {
+        float maxPossibleStrength = _jumpStats.MaxChargedAdditionalStrength + _jumpStats.InitialStrength;
+        float threshold = maxPossibleStrength * _chargedJumpFeedbackThresholdFactor;
+        return calculatedJumpStrength > threshold;
     }
 
     void PlayChargedJumpFeedbacks()
