@@ -13,13 +13,13 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
 
         // Act
         // the act, is, to not call Start.
 
         // Assert
-        Assert.That(chargedJump.IsCharging, Is.EqualTo(false));
+        Assert.That(jumpCharger.IsCharging, Is.EqualTo(false));
     }
 
     [Test]
@@ -27,13 +27,13 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
         
         // Act
-        chargedJump.Start();
+        jumpCharger.Start();
 
         // Assert
-        Assert.That(chargedJump.IsCharging, Is.EqualTo(true));
+        Assert.That(jumpCharger.IsCharging, Is.EqualTo(true));
     }
 
     [Test]
@@ -41,14 +41,14 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         // Act
-        _ = chargedJump.Charge(DELTA_TIME_ZERO);
+        _ = jumpCharger.Charge(DELTA_TIME_ZERO);
 
         // Assert
-        Assert.That(chargedJump.IsCharging, Is.EqualTo(true));
+        Assert.That(jumpCharger.IsCharging, Is.EqualTo(true));
     }
 
     [Test]
@@ -56,13 +56,13 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
         // Act
-        _ = chargedJump.End();
+        _ = jumpCharger.End();
 
         // Assert
-        Assert.That(chargedJump.IsCharging, Is.EqualTo(false));
+        Assert.That(jumpCharger.IsCharging, Is.EqualTo(false));
     }
 
     [Test]
@@ -70,11 +70,11 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         // Act
-        float percentage = chargedJump.Charge(DELTA_TIME_ZERO);
+        float percentage = jumpCharger.Charge(DELTA_TIME_ZERO);
 
         // Assert
         Assert.Zero(percentage);
@@ -86,11 +86,11 @@ public sealed class JumpChargerTests : BaseTests
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
         jumpStats.MaxChargeDurationInSeconds = 1.0f;
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         // Act
-        float percentage = chargedJump.Charge(Time.deltaTime);
+        float percentage = jumpCharger.Charge(Time.deltaTime);
 
         // Assert
         Assert.Positive(percentage);
@@ -101,15 +101,15 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         float percentage = 0.0f;
         do
         {
             // Act
             yield return SKIP_FRAME;
-            percentage = chargedJump.Charge(Time.deltaTime);
+            percentage = jumpCharger.Charge(Time.deltaTime);
             
             // Assert
             Assert.Positive(percentage);
@@ -122,13 +122,13 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         float CHARG_TIME_DOUBLE = jumpStats.MaxChargeDurationInSeconds * 2;
 
         // Act
-        float percentage = chargedJump.Charge(CHARG_TIME_DOUBLE);
+        float percentage = jumpCharger.Charge(CHARG_TIME_DOUBLE);
 
         // Assert
         Assert.That(percentage, Is.EqualTo(100.0f).Using(FloatComparer));
@@ -140,15 +140,15 @@ public sealed class JumpChargerTests : BaseTests
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
         jumpStats.MaxChargeDurationInSeconds = 0.1f; // make test quicker c:
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         float previousPercentage = 0.0f;
         do
         {
             // Act
             yield return SKIP_FRAME;
-            float currentPercentage = chargedJump.Charge(Time.deltaTime);
+            float currentPercentage = jumpCharger.Charge(Time.deltaTime);
 
             // Assert
             Assert.That(currentPercentage, Is.GreaterThan(previousPercentage));
@@ -164,17 +164,17 @@ public sealed class JumpChargerTests : BaseTests
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
         jumpStats.MaxChargeDurationInSeconds = 0.1f; // make test quicker c:
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
         
         DateTime start = DateTime.Now;
-        chargedJump.Start();
+        jumpCharger.Start();
 
         float percentage = 0.0f;
         do
         {
             // Act
             yield return SKIP_FRAME;
-            percentage = chargedJump.Charge(Time.deltaTime);
+            percentage = jumpCharger.Charge(Time.deltaTime);
             Debug.Log($"Runtime: {(DateTime.Now - start).TotalSeconds}");
         }
         while ((DateTime.Now - start).TotalSeconds < jumpStats.MaxChargeDurationInSeconds);
@@ -190,12 +190,12 @@ public sealed class JumpChargerTests : BaseTests
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
         const float initialStrength = 10.0f;
         jumpStats.InitialStrength = initialStrength;
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         // Act
         // dont Charge
-        float jumpStregth = chargedJump.End();
+        float jumpStregth = jumpCharger.End();
 
         // Assert
         Assert.That(jumpStregth, Is.EqualTo(initialStrength));
@@ -206,13 +206,13 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         // Act
-        chargedJump.Charge(Time.deltaTime);
+        jumpCharger.Charge(Time.deltaTime);
 
-        float jumpStregth = chargedJump.End();
+        float jumpStregth = jumpCharger.End();
 
         // Assert
         Assert.Positive(jumpStregth);
@@ -229,13 +229,13 @@ public sealed class JumpChargerTests : BaseTests
         jumpStats.MaxChargedAdditionalStrength = 500.0f;
         jumpStats.MaxChargeDurationInSeconds = TEN_SECONDS;
         
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         // Act
-        chargedJump.Charge(TEN_SECONDS);
+        jumpCharger.Charge(TEN_SECONDS);
 
-        float jumpStregth = chargedJump.End();
+        float jumpStregth = jumpCharger.End();
 
         // Assert
         Assert.That(jumpStregth, Is.GreaterThan(jumpStats.InitialStrength));
@@ -253,13 +253,13 @@ public sealed class JumpChargerTests : BaseTests
         jumpStats.MaxChargeDurationInSeconds = TEN_SECONDS;
         float maxPossibleStrength = jumpStats.InitialStrength + jumpStats.MaxChargedAdditionalStrength;
 
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
-        chargedJump.Start();
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
+        jumpCharger.Start();
 
         // Act
-        chargedJump.Charge(TEN_SECONDS);
+        jumpCharger.Charge(TEN_SECONDS);
 
-        float jumpStregth = chargedJump.End();
+        float jumpStregth = jumpCharger.End();
 
         // Assert
         Assert.That(jumpStregth, Is.EqualTo(maxPossibleStrength));
@@ -270,10 +270,10 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
 
         // Act
-        void chargeBeforeStart() => chargedJump.Charge(DELTA_TIME_ZERO);
+        void chargeBeforeStart() => jumpCharger.Charge(DELTA_TIME_ZERO);
 
         // Assert
         Assert.Throws<InvalidOperationException>(chargeBeforeStart);
@@ -284,10 +284,10 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
 
         // Act
-        void endBeforeStart() => chargedJump.End();
+        void endBeforeStart() => jumpCharger.End();
 
         // Assert
         Assert.Throws<InvalidOperationException>(endBeforeStart);
@@ -298,12 +298,12 @@ public sealed class JumpChargerTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCharger chargedJump = new JumpCharger(jumpStats);
+        JumpCharger jumpCharger = new JumpCharger(jumpStats);
 
         // Act
-        chargedJump.Start();
+        jumpCharger.Start();
 
         // Assert
-        Assert.Throws<InvalidOperationException>(chargedJump.Start);
+        Assert.Throws<InvalidOperationException>(jumpCharger.Start);
     }
 }

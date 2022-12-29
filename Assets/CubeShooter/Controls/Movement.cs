@@ -44,7 +44,7 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] ComponentPoolNonAlloc _groundDropParticles = null;
 
     // Movement 
-    JumpCharger _chargedJumpCalculator = null;
+    JumpCharger _jumpCharger = null;
 
     void Awake()
     {
@@ -63,7 +63,7 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
         Assert.IsNotNull(_chargedJumpParticles, $"{nameof(Movement)} requires {nameof(_chargedJumpParticles)}.");
         
-        _chargedJumpCalculator = new JumpCharger(_jumpStats);
+        _jumpCharger = new JumpCharger(_jumpStats);
         _tmProJumpChargePercentage.color = _meshRenderer.material.color;
     }
 
@@ -88,7 +88,7 @@ public sealed class Movement : MonoBehaviour
     void RaiseMoveEvents()
     {
         float direction = _inputs.MoveDirection.x;
-        if (direction != 0.0f && !_chargedJumpCalculator.IsCharging)
+        if (direction != 0.0f && !_jumpCharger.IsCharging)
             MovePressed(direction);
     }
 
@@ -124,13 +124,13 @@ public sealed class Movement : MonoBehaviour
     {
         _rigidbody.useGravity = false;
         _rigidbody.velocity = Vector3.zero;
-        _chargedJumpCalculator.Start();
+        _jumpCharger.Start();
         ShowJumpChargeercentage(0.0f);
     }
 
     void JumpPressHold()
     {
-        float percentageComplete = _chargedJumpCalculator.Charge(Time.deltaTime);
+        float percentageComplete = _jumpCharger.Charge(Time.deltaTime);
         ShowJumpChargeercentage(percentageComplete);
     }
 
@@ -138,8 +138,8 @@ public sealed class Movement : MonoBehaviour
     {
         _rigidbody.useGravity = true;
 
-        _ = _chargedJumpCalculator.Charge(Time.deltaTime);
-        float calculatedJumpStrength = _chargedJumpCalculator.End();
+        _ = _jumpCharger.Charge(Time.deltaTime);
+        float calculatedJumpStrength = _jumpCharger.End();
 
         if (ChargedJumpFeedbackThresholdReached(calculatedJumpStrength))
             PlayChargedJumpFeedbacks();
