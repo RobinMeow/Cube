@@ -86,18 +86,12 @@ public sealed class Movement : MonoBehaviour
     void Move()
     {
         Vector3 movementForce = Vector3.zero;
-        float direction = _inputs.MoveDirection.x;
-
-        if (direction != 0.0f && !_jumpCalculator.IsCharging)
-        {
-            movementForce.x = _stats.FloatStrength * direction;
-        }
 
         float calculatedJumpStrength = _jumpCalculator.Calculate(_inputs.JumpIsPressed, _inputs.JumpWasPressedPreviousFixedUpdate, out float percentageComplete);
         if (percentageComplete != 0.0f)
             _tmProJumpChargePercentage.text = $"{percentageComplete:00} %";
         
-        bool isChargingJump = calculatedJumpStrength > 0.0f;
+        bool isChargingJump = _jumpCalculator.IsCharging;
         bool isJumping = _inputs.JumpWasPressedPreviousFixedUpdate && !_inputs.JumpIsPressed;
         if (isJumping)
         {
@@ -125,6 +119,13 @@ public sealed class Movement : MonoBehaviour
 
             // blend out text mesh pro
             _tmProJumpChargePercentage.text = String.Empty;
+        }
+
+        float direction = _inputs.MoveDirection.x;
+
+        if (direction != 0.0f && !_jumpCalculator.IsCharging)
+        {
+            movementForce.x = _stats.FloatStrength * direction;
         }
 
         _rigidbody.AddForce(movementForce, ForceMode.Force);
