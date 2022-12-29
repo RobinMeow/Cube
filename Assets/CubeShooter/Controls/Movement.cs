@@ -44,7 +44,7 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] ComponentPoolNonAlloc _groundDropParticles = null;
 
     // Movement 
-    JumpCalculator _jumpCalculator = null;
+    JumpCalculator _chargedJumpCalculator = null;
 
     void Awake()
     {
@@ -63,7 +63,7 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
         Assert.IsNotNull(_chargedJumpParticles, $"{nameof(Movement)} requires {nameof(_chargedJumpParticles)}.");
         
-        _jumpCalculator = new JumpCalculator(_jumpStats);
+        _chargedJumpCalculator = new JumpCalculator(_jumpStats);
         _tmProJumpChargePercentage.color = _meshRenderer.material.color;
     }
 
@@ -88,7 +88,7 @@ public sealed class Movement : MonoBehaviour
     void RaiseMoveEvents()
     {
         float direction = _inputs.MoveDirection.x;
-        if (direction != 0.0f && !_jumpCalculator.IsCharging)
+        if (direction != 0.0f && !_chargedJumpCalculator.IsCharging)
             MovePressed(direction);
     }
 
@@ -124,28 +124,22 @@ public sealed class Movement : MonoBehaviour
     {
         _rigidbody.useGravity = false;
         _rigidbody.velocity = Vector3.zero;
-        _ = _jumpCalculator.Calculate(_inputs.JumpIsPressed, _inputs.JumpWasPressedPreviousFixedUpdate, out _);
-        //_jumpCalculator.StartChargeJump();
+        _chargedJumpCalculator.Start();
         ShowJumpChargeercentage(0.0f);
     }
 
     void JumpPressHold()
     {
-        _ = _jumpCalculator.Calculate(_inputs.JumpIsPressed, _inputs.JumpWasPressedPreviousFixedUpdate, out float percentageComplete);
-        //float percentageComplete = _jumpCalculator.ChargeJump();
+        float percentageComplete = _chargedJumpCalculator.Charge(Time.deltaTime);
         ShowJumpChargeercentage(percentageComplete);
-
-        // this is actually covered, by a unit test, hmm... 
-        if (percentageComplete == 0.0f)
-            this.LogError($"{nameof(percentageComplete)} is shouldnt be zero '{percentageComplete}'.");
     }
 
     void JumpPressEnd()
     {
         _rigidbody.useGravity = true;
 
-        float calculatedJumpStrength = _jumpCalculator.Calculate(_inputs.JumpIsPressed, _inputs.JumpWasPressedPreviousFixedUpdate, out _);
-        //float calculatedJumpStrength = _jumpCalculator.EndJump();
+        _ = _chargedJumpCalculator.Charge(Time.deltaTime);
+        float calculatedJumpStrength = _chargedJumpCalculator.End();
 
         if (ChargedJumpFeedbackThresholdReached(calculatedJumpStrength))
             PlayChargedJumpFeedbacks();
