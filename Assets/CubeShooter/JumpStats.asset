@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86e80158d631fae42a537aad3bca275b, type: 3}
   m_Name: JumpStats
   m_EditorClassIdentifier: 
-  <InitialStrength>k__BackingField: 8000
-  <MaxChargedAdditionalStrength>k__BackingField: 30000
+  <InitialStrength>k__BackingField: 200
+  <MaxChargedAdditionalStrength>k__BackingField: 600
   <MaxChargeDurationInSeconds>k__BackingField: 0.5
