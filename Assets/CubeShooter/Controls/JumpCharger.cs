@@ -60,7 +60,7 @@ public sealed class JumpCharger
         float additionalStrength = CalculateAdditionalStrength();
         float calculatedStrength = _stats.InitialStrength + additionalStrength;
 
-        _chargeTime.ResetTime();
+        _chargeTime.Reset();
         _isCharging = false;
 
         return calculatedStrength;

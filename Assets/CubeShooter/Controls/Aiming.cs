@@ -87,7 +87,7 @@ public sealed class Aiming : MonoBehaviour
     void OnShotEnd()
     {
         float compledtedShotChargedFactor = _chargeTimer.GetCompletedFactor();
-        _chargeTimer.ResetTime();
+        _chargeTimer.Reset();
         _orbitingCubes.StopRotation();
         _orbitingCubes.gameObject.SetActive(false);
         _isShooting = false;

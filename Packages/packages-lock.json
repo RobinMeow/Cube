@@ -14,7 +14,7 @@
       "dependencies": {
         "com.unity.editorcoroutines": "1.0.0"
       },
-      "hash": "428b8260d7a34b6d1b6c89eacd2c76737920c6dd"
+      "hash": "e56d37c48d5089b417fa57d2c952e80ba32fd7f3"
     },
     "com.unity.cinemachine": {
       "version": "2.8.9",
