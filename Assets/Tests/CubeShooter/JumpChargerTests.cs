@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
-using NUnit.Framework.Internal.Commands;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public sealed class JumpCalculatorTests : BaseTests
+public sealed class JumpChargerTests : BaseTests
 {
     const float DELTA_TIME_ZERO = 0.0f;
 
@@ -14,7 +13,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
 
         // Act
         // the act, is, to not call Start.
@@ -28,7 +27,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         
         // Act
         chargedJump.Start();
@@ -42,7 +41,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         // Act
@@ -57,7 +56,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
         // Act
         _ = chargedJump.End();
@@ -71,7 +70,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         // Act
@@ -87,7 +86,7 @@ public sealed class JumpCalculatorTests : BaseTests
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
         jumpStats.MaxChargeDurationInSeconds = 1.0f;
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         // Act
@@ -102,7 +101,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         float percentage = 0.0f;
@@ -123,7 +122,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         float CHARG_TIME_DOUBLE = jumpStats.MaxChargeDurationInSeconds * 2;
@@ -141,7 +140,7 @@ public sealed class JumpCalculatorTests : BaseTests
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
         jumpStats.MaxChargeDurationInSeconds = 0.1f; // make test quicker c:
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         float previousPercentage = 0.0f;
@@ -165,7 +164,7 @@ public sealed class JumpCalculatorTests : BaseTests
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
         jumpStats.MaxChargeDurationInSeconds = 0.1f; // make test quicker c:
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         
         DateTime start = DateTime.Now;
         chargedJump.Start();
@@ -191,7 +190,7 @@ public sealed class JumpCalculatorTests : BaseTests
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
         const float initialStrength = 10.0f;
         jumpStats.InitialStrength = initialStrength;
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         // Act
@@ -207,7 +206,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         // Act
@@ -230,7 +229,7 @@ public sealed class JumpCalculatorTests : BaseTests
         jumpStats.MaxChargedAdditionalStrength = 500.0f;
         jumpStats.MaxChargeDurationInSeconds = TEN_SECONDS;
         
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         // Act
@@ -254,7 +253,7 @@ public sealed class JumpCalculatorTests : BaseTests
         jumpStats.MaxChargeDurationInSeconds = TEN_SECONDS;
         float maxPossibleStrength = jumpStats.InitialStrength + jumpStats.MaxChargedAdditionalStrength;
 
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
         chargedJump.Start();
 
         // Act
@@ -271,7 +270,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
 
         // Act
         void chargeBeforeStart() => chargedJump.Charge(DELTA_TIME_ZERO);
@@ -285,7 +284,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
 
         // Act
         void endBeforeStart() => chargedJump.End();
@@ -299,7 +298,7 @@ public sealed class JumpCalculatorTests : BaseTests
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        JumpCharger chargedJump = new JumpCharger(jumpStats);
 
         // Act
         chargedJump.Start();

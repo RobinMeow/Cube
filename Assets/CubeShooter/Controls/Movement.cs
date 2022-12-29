@@ -44,7 +44,7 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] ComponentPoolNonAlloc _groundDropParticles = null;
 
     // Movement 
-    JumpCalculator _chargedJumpCalculator = null;
+    JumpCharger _chargedJumpCalculator = null;
 
     void Awake()
     {
@@ -63,7 +63,7 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
         Assert.IsNotNull(_chargedJumpParticles, $"{nameof(Movement)} requires {nameof(_chargedJumpParticles)}.");
         
-        _chargedJumpCalculator = new JumpCalculator(_jumpStats);
+        _chargedJumpCalculator = new JumpCharger(_jumpStats);
         _tmProJumpChargePercentage.color = _meshRenderer.material.color;
     }
 
