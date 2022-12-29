@@ -1,239 +1,310 @@
+using System;
 using System.Collections;
 using NUnit.Framework;
+using NUnit.Framework.Internal.Commands;
 using UnityEngine;
 using UnityEngine.TestTools;
 
 public sealed class JumpCalculatorTests : BaseTests
 {
+    const float DELTA_TIME_ZERO = 0.0f;
+
     [Test]
-    public void percentageComplete_is_zero_on_first_jump_press()
+    public void IsCharging_equals_false_before_Start()
     {
         // Arrange
         JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-        
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+
         // Act
-        jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out float percentageComplete);
+        // the act, is, to not call Start.
 
         // Assert
-        Assert.Zero(percentageComplete);
+        Assert.That(chargedJump.IsCharging, Is.EqualTo(false));
     }
 
     [Test]
-    public void percentageComplete_is_positive_while_charging()
+    public void IsCharging_equals_true_after_Start()
     {
         // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        
         // Act
-        // initial press
-        jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out float percentageComplete);
-        // hold press
-        jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: true, out  percentageComplete);
+        chargedJump.Start();
 
         // Assert
-        Assert.Positive(percentageComplete);
+        Assert.That(chargedJump.IsCharging, Is.EqualTo(true));
+    }
+
+    [Test]
+    public void IsCharging_equals_true_after_Charge()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        // Act
+        _ = chargedJump.Charge(DELTA_TIME_ZERO);
+
+        // Assert
+        Assert.That(chargedJump.IsCharging, Is.EqualTo(true));
+    }
+
+    [Test]
+    public void IsCharging_equals_false_after_End()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+        // Act
+        _ = chargedJump.End();
+
+        // Assert
+        Assert.That(chargedJump.IsCharging, Is.EqualTo(false));
+    }
+
+    [Test]
+    public void percentage_is_zero_after_zero_Charge()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        // Act
+        float percentage = chargedJump.Charge(DELTA_TIME_ZERO);
+
+        // Assert
+        Assert.Zero(percentage);
+    }
+
+    [Test]
+    public void percentage_is_positive_after_Charge()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        jumpStats.MaxChargeDurationInSeconds = 1.0f;
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        // Act
+        float percentage = chargedJump.Charge(Time.deltaTime);
+
+        // Assert
+        Assert.Positive(percentage);
     }
 
     [UnityTest]
-    public IEnumerator percentageComplete_equals_100f_when_fully_charged()
+    public IEnumerator percentage_is_positive_after_each_Charge()
     {
         // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); 
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
 
-        float percentageComplete = 0.0f;
-        // Act
-
-        // initial jump press
-        jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out percentageComplete);
+        float percentage = 0.0f;
         do
         {
-            // holding jump
+            // Act
             yield return SKIP_FRAME;
-            jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: true, out percentageComplete);
-        } 
-        while (percentageComplete != 100.0f);
-
-        // release jump
-        jumpCalculator.Calculate(jumpIsPressed: false, jumpWasPressedPreviousFixedUpdate: true, out percentageComplete);
-
-        // Assert
-        Assert.That(percentageComplete, Is.EqualTo(100.0f)
-            .Using(FloatComparer));
-    }
-
-    [Test]
-    public void percentageComplete_equals_0f_without_jump_press()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-        
-        // Act
-        jumpCalculator.Calculate(jumpIsPressed: false, jumpWasPressedPreviousFixedUpdate: false, out float percentageComplete);
-
-        // Assert
-        Assert.Zero(percentageComplete);
-    }
-
-    [Test]
-    public void percentageComplete_equals_0f_after_jump_release_when_was_not_charging()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-
-        // Act
-        jumpCalculator.Calculate(jumpIsPressed: false, jumpWasPressedPreviousFixedUpdate: true, out float percentageComplete);
-
-        // Assert
-        Assert.Zero(percentageComplete);
-    }
-
-    [Test]
-    public void jumpStrength_is_zero_after_jump_release_when_was_not_charging()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-
-        // Act
-        float jumpStrength = jumpCalculator.Calculate(jumpIsPressed: false, jumpWasPressedPreviousFixedUpdate: true, out _);
-
-        // Assert
-        Assert.Zero(jumpStrength);
-    }
-
-    [Test]
-    public void jumpStrength_is_zero_befor_jump_press()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-
-        // Act
-        float jumpStrength = jumpCalculator.Calculate(jumpIsPressed: false, jumpWasPressedPreviousFixedUpdate: false, out _);
-
-        // Assert
-        Assert.Zero(jumpStrength);
-    }
-
-    [Test]
-    public void jumpStrength_is_positive_after_initial_jump_press()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-        jumpStats.InitialStrength = 1.0f;
-
-        // Act
-        float initialJumpStrength = jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out _);
-
-        // Assert
-        Assert.Positive(initialJumpStrength);
-    }
-
-    [Test]
-    public void jumpStrength_equals_InitialStrength_after_initial_jump_press()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-        jumpStats.InitialStrength = 1.0f;
-
-        // Act
-        float initialJumpStrength = jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out _);
-
-        // Assert
-        Assert.That(initialJumpStrength, Is.EqualTo(jumpStats.InitialStrength)
-            .Using(FloatComparer));
-    }
-
-    [UnityTest]
-    public IEnumerator jumpStrength_is_higher_than_initialJumpStrengh_while_charging()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-
-        // Act
-        
-        // initial press
-        float initialJumpStrength = jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out _);
-        yield return SKIP_FRAME;
-        // charge
-        float jumpStrength = jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: true, out _);
-
-        // Assert
-        Assert.That(jumpStrength, Is.GreaterThan(initialJumpStrength));
-    }
-
-    [UnityTest]
-    public IEnumerator jumpStrength_is_maxPossibleJumpStrength_fully_charged()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-        
-        float maxPossibleJumpStrength = jumpStats.InitialStrength + jumpStats.MaxChargedAdditionalStrength;
-
-        // Act
-
-        float percentageComplete = 0.0f;
-        // Act
-
-        // initial jump press
-        jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out percentageComplete);
-        do
-        {
-            // holding jump
-            yield return SKIP_FRAME;
-            jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: true, out percentageComplete);
+            percentage = chargedJump.Charge(Time.deltaTime);
+            
+            // Assert
+            Assert.Positive(percentage);
         }
-        while (percentageComplete != 100.0f);
-
-        // release jump
-        float jumpStrength = jumpCalculator.Calculate(jumpIsPressed: false, jumpWasPressedPreviousFixedUpdate: true, out _);
-
-        // Assert
-        Assert.That(maxPossibleJumpStrength, Is.EqualTo(jumpStrength).Using(FloatComparer));
-    }
-
-    [UnityTest]
-    public IEnumerator isCharging_is_true_while_charging()
-    {
-        // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
-
-        // Act
-        float percentageComplete = 0.0f;
-        // Act
-
-        // initial jump press
-        _ = jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: false, out _);
-        do
-        {
-            // holding jump
-            yield return SKIP_FRAME;
-            _ = jumpCalculator.Calculate(jumpIsPressed: true, jumpWasPressedPreviousFixedUpdate: true, out percentageComplete);
-        }
-        while (percentageComplete == 0.0f);
-
-        // Assert
-        Assert.That(jumpCalculator.IsCharging, Is.EqualTo(true));
+        while (percentage != 100.0f);
     }
 
     [Test]
-    public void isCharging_is_false_while_not_charging()
+    public void percentage_cannot_exceed_100()
     {
         // Arrange
-        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>(); // default stats are sufficient
-        JumpCalculator jumpCalculator = new JumpCalculator(jumpStats);
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        float CHARG_TIME_DOUBLE = jumpStats.MaxChargeDurationInSeconds * 2;
+
+        // Act
+        float percentage = chargedJump.Charge(CHARG_TIME_DOUBLE);
 
         // Assert
-        Assert.That(jumpCalculator.IsCharging, Is.EqualTo(false));
+        Assert.That(percentage, Is.EqualTo(100.0f).Using(FloatComparer));
+    }
+
+    [UnityTest]
+    public IEnumerator percentage_is_higher_than_the_percantage_previous_frame_after_each_Charge()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        jumpStats.MaxChargeDurationInSeconds = 0.1f; // make test quicker c:
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        float previousPercentage = 0.0f;
+        do
+        {
+            // Act
+            yield return SKIP_FRAME;
+            float currentPercentage = chargedJump.Charge(Time.deltaTime);
+
+            // Assert
+            Assert.That(currentPercentage, Is.GreaterThan(previousPercentage));
+
+            previousPercentage = currentPercentage;
+        }
+        while (previousPercentage != 100.0f);
+    }
+
+    [UnityTest]
+    public IEnumerator percentage_is_100_when_fully_charged()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        jumpStats.MaxChargeDurationInSeconds = 0.1f; // make test quicker c:
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        
+        DateTime start = DateTime.Now;
+        chargedJump.Start();
+
+        float percentage = 0.0f;
+        do
+        {
+            // Act
+            yield return SKIP_FRAME;
+            percentage = chargedJump.Charge(Time.deltaTime);
+            Debug.Log($"Runtime: {(DateTime.Now - start).TotalSeconds}");
+        }
+        while ((DateTime.Now - start).TotalSeconds < jumpStats.MaxChargeDurationInSeconds);
+
+        // Assert
+        Assert.That(percentage, Is.EqualTo(100.0f).Using(FloatComparer));
+    }
+
+    [Test]
+    public void jumpStrength_equals_InitialStrength_after_End_with_no_Charge_call()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        const float initialStrength = 10.0f;
+        jumpStats.InitialStrength = initialStrength;
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        // Act
+        // dont Charge
+        float jumpStregth = chargedJump.End();
+
+        // Assert
+        Assert.That(jumpStregth, Is.EqualTo(initialStrength));
+    }
+
+    [Test]
+    public void jumpStrength_is_positive_after_End_when_charged()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        // Act
+        chargedJump.Charge(Time.deltaTime);
+
+        float jumpStregth = chargedJump.End();
+
+        // Assert
+        Assert.Positive(jumpStregth);
+    }
+
+    [Test]
+    public void jumpStrength_is_greater_than_InitialStrength_after_End_when_fully_charged()
+    {
+        // Arrange
+        const float TEN_SECONDS = 10.0f;
+
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        jumpStats.InitialStrength = 50.0f;
+        jumpStats.MaxChargedAdditionalStrength = 500.0f;
+        jumpStats.MaxChargeDurationInSeconds = TEN_SECONDS;
+        
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        // Act
+        chargedJump.Charge(TEN_SECONDS);
+
+        float jumpStregth = chargedJump.End();
+
+        // Assert
+        Assert.That(jumpStregth, Is.GreaterThan(jumpStats.InitialStrength));
+    }
+
+    [Test]
+    public void jumpStrength_equals_maxPossibleJumpStrength_when_fully_charged()
+    {
+        // Arrange
+        const float TEN_SECONDS = 10.0f;
+
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        jumpStats.InitialStrength = 50.0f;
+        jumpStats.MaxChargedAdditionalStrength = 500.0f;
+        jumpStats.MaxChargeDurationInSeconds = TEN_SECONDS;
+        float maxPossibleStrength = jumpStats.InitialStrength + jumpStats.MaxChargedAdditionalStrength;
+
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+        chargedJump.Start();
+
+        // Act
+        chargedJump.Charge(TEN_SECONDS);
+
+        float jumpStregth = chargedJump.End();
+
+        // Assert
+        Assert.That(jumpStregth, Is.EqualTo(maxPossibleStrength));
+    }
+
+    [Test]
+    public void throws_exception_on_calling_Charge_before_Start()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+
+        // Act
+        void chargeBeforeStart() => chargedJump.Charge(DELTA_TIME_ZERO);
+
+        // Assert
+        Assert.Throws<InvalidOperationException>(chargeBeforeStart);
+    }
+
+    [Test]
+    public void throws_exception_on_calling_End_before_Start()
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+
+        // Act
+        void endBeforeStart() => chargedJump.End();
+
+        // Assert
+        Assert.Throws<InvalidOperationException>(endBeforeStart);
+    }
+
+    [Test]
+    public void throws_exception_on_calling_Start_twice() // (without calling End inbetween)
+    {
+        // Arrange
+        JumpStats jumpStats = ScriptableObject.CreateInstance<JumpStats>();
+        JumpCalculator chargedJump = new JumpCalculator(jumpStats);
+
+        // Act
+        chargedJump.Start();
+
+        // Assert
+        Assert.Throws<InvalidOperationException>(chargedJump.Start);
     }
 }

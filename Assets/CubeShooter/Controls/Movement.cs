@@ -1,4 +1,5 @@
 using Common.Modules;
+using RibynsModules;
 using System;
 using System.Collections;
 using TMPro;
@@ -43,7 +44,7 @@ public sealed class Movement : MonoBehaviour
     [SerializeField] ComponentPoolNonAlloc _groundDropParticles = null;
 
     // Movement 
-    JumpCalculator _jumpCalculator = null;
+    JumpCalculator _chargedJumpCalculator = null;
 
     void Awake()
     {
@@ -62,7 +63,7 @@ public sealed class Movement : MonoBehaviour
         Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
         Assert.IsNotNull(_chargedJumpParticles, $"{nameof(Movement)} requires {nameof(_chargedJumpParticles)}.");
         
-        _jumpCalculator = new JumpCalculator(_jumpStats);
+        _chargedJumpCalculator = new JumpCalculator(_jumpStats);
         _tmProJumpChargePercentage.color = _meshRenderer.material.color;
     }
 
@@ -78,57 +79,87 @@ public sealed class Movement : MonoBehaviour
             PlayGroundDropFeedback();
         }
 
-        Move();
+        RaiseJumpInputEvents();
+        RaiseMoveEvents();
 
         _hadGroundHitPreviousFrame = _hasGroundHit;
     }
 
-    void Move()
+    void RaiseMoveEvents()
     {
-        Vector3 movementForce = Vector3.zero;
-
-        float calculatedJumpStrength = _jumpCalculator.Calculate(_inputs.JumpIsPressed, _inputs.JumpWasPressedPreviousFixedUpdate, out float percentageComplete);
-        if (percentageComplete != 0.0f)
-            _tmProJumpChargePercentage.text = $"{percentageComplete:00} %";
-        
-        bool isChargingJump = _jumpCalculator.IsCharging;
-        bool isJumping = _inputs.JumpWasPressedPreviousFixedUpdate && !_inputs.JumpIsPressed;
-        if (isJumping)
-        {
-            movementForce.y = calculatedJumpStrength;
-            if (ChargedJumpFeedbackThresholdReached(calculatedJumpStrength))
-            {
-                PlayChargedJumpFeedbacks();
-            }
-            else
-            {
-                _audioSource.PlayOneShot(_jumpClip);
-            }
-        }
-        else if (isChargingJump)
-        {
-            // disable gravity 
-            _rigidbody.useGravity = false;
-            _rigidbody.velocity = Vector3.zero;
-            SetHoldJumpTextPosition();
-        }
-        else if (!isChargingJump && !_rigidbody.useGravity)
-        {
-            // re-enable gravity 
-            _rigidbody.useGravity = true;
-
-            // blend out text mesh pro
-            _tmProJumpChargePercentage.text = String.Empty;
-        }
-
         float direction = _inputs.MoveDirection.x;
+        if (direction != 0.0f && !_chargedJumpCalculator.IsCharging)
+            MovePressed(direction);
+    }
 
-        if (direction != 0.0f && !_jumpCalculator.IsCharging)
+    void MovePressed(float direction)
+    {
+        _rigidbody.AddForce(new Vector3(_stats.FloatStrength * direction, 0.0f, 0.0f), ForceMode.Force);
+    }
+
+    void RaiseJumpInputEvents()
+    {
+        bool jumpIsPressed = _inputs.JumpIsPressed;
+        bool jumpWasPressedPreviousFrame = _inputs.JumpWasPressedPreviousFixedUpdate;
+        bool isInitialJumpPress() => jumpIsPressed && !jumpWasPressedPreviousFrame;
+        bool isHoldingJumpPress() => jumpIsPressed && jumpWasPressedPreviousFrame;
+        bool hasReleasedJumpPress() => !jumpIsPressed && jumpWasPressedPreviousFrame;
+
+
+        if (isInitialJumpPress())
         {
-            movementForce.x = _stats.FloatStrength * direction;
+            JumpPressStart();
         }
+        else if (isHoldingJumpPress())
+        {
+            JumpPressHold();
+        }
+        else if (hasReleasedJumpPress())
+        {
+            JumpPressEnd();
+        }
+    }
 
-        _rigidbody.AddForce(movementForce, ForceMode.Force);
+    void JumpPressStart()
+    {
+        _rigidbody.useGravity = false;
+        _rigidbody.velocity = Vector3.zero;
+        _chargedJumpCalculator.Start();
+        ShowJumpChargeercentage(0.0f);
+    }
+
+    void JumpPressHold()
+    {
+        float percentageComplete = _chargedJumpCalculator.Charge(Time.deltaTime);
+        ShowJumpChargeercentage(percentageComplete);
+    }
+
+    void JumpPressEnd()
+    {
+        _rigidbody.useGravity = true;
+
+        _ = _chargedJumpCalculator.Charge(Time.deltaTime);
+        float calculatedJumpStrength = _chargedJumpCalculator.End();
+
+        if (ChargedJumpFeedbackThresholdReached(calculatedJumpStrength))
+            PlayChargedJumpFeedbacks();
+        else
+            PlayJumpFeedbacks();
+
+        HideJumpChargePercentage();
+
+        _rigidbody.AddForce(new Vector3(0.0f, calculatedJumpStrength, 0.0f), ForceMode.Impulse);
+    }
+
+    void ShowJumpChargeercentage(float percentage)
+    {
+        _tmProJumpChargePercentage.text = $"{(int)percentage} %";
+        SetHoldJumpTextPosition();
+    }
+
+    void HideJumpChargePercentage()
+    {
+        _tmProJumpChargePercentage.text = string.Empty;
     }
 
     bool ChargedJumpFeedbackThresholdReached(float calculatedJumpStrength)
@@ -154,6 +185,11 @@ public sealed class Movement : MonoBehaviour
 
             _chargedJumpParticles.Return(particleSystem);
         }
+    }
+
+    void PlayJumpFeedbacks()
+    {
+        _audioSource.PlayOneShot(_jumpClip);
     }
 
     void PlayGroundDropFeedback()

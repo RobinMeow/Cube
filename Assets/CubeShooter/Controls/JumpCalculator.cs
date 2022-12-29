@@ -1,7 +1,6 @@
 using RibynsModules.GameLogger;
 using RibynsModules.GameTimer;
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -13,8 +12,6 @@ public sealed class JumpCalculator
     static GameLogger _logger => _loggerInstance;
     bool _isCharging = false;
     public bool IsCharging { get => _isCharging; }
-    
-    //public bool JumpStarted { get; private set; }
 
     public JumpCalculator(JumpStats stats)
     {
@@ -24,52 +21,49 @@ public sealed class JumpCalculator
         _chargeTime = new GameTimer(stats.MaxChargeDurationInSeconds);
     }
 
-    /// <summary>
-    /// this should be called each frame
-    /// </summary>
-    public float Calculate(bool jumpIsPressed, bool jumpWasPressedPreviousFixedUpdate, out float percentageComplete)
-    {
-        float calculatedStrength = 0.0f;
-        percentageComplete = 0.0f;
-
-        bool hasReleasedJumpButton() => !jumpIsPressed && jumpWasPressedPreviousFixedUpdate;
-        bool hasStartedPressingDownJumpButton() => jumpIsPressed && !jumpWasPressedPreviousFixedUpdate;
-        bool isHoldingDownJumpButton() => jumpIsPressed && jumpWasPressedPreviousFixedUpdate;
-
-        if (hasStartedPressingDownJumpButton()) 
-        {
-            _isCharging = true;
-            calculatedStrength = _stats.InitialStrength;
-            percentageComplete = 0.0f;
-        }
-        else if (isHoldingDownJumpButton() && _isCharging)
-        {
-            _chargeTime.Tick(Time.deltaTime);
-            float additionalStrength = CalculateAdditionalStrength();
-            calculatedStrength = _stats.InitialStrength + additionalStrength;
-            percentageComplete = _chargeTime.GetCompletedFactor() * 100.0f;
-        }
-        else if (hasReleasedJumpButton() && _isCharging) 
-        {
-            _chargeTime.Tick(Time.deltaTime);
-            float additionalStrength = CalculateAdditionalStrength();
-            calculatedStrength = _stats.InitialStrength + additionalStrength;
-            percentageComplete = _chargeTime.GetCompletedFactor() * 100.0f;
-
-            _isCharging = false;
-            _chargeTime.ResetTime();
-            _logger.Log($"{nameof(hasReleasedJumpButton)} calcedStrength: {calculatedStrength}");
-        }
-        else
-        {
-            _isCharging = false;
-        }
-
-        return calculatedStrength;
-    }
-
     float CalculateAdditionalStrength()
     {
         return _chargeTime.GetCompletedFactor() * _stats.MaxChargedAdditionalStrength;
+    }
+
+    /// <exception cref="InvalidOperationException">do not call twice without calling <see cref="End"/> inbetween</exception>
+    public void Start()
+    {
+        if (_isCharging)
+            throw new InvalidOperationException($"Cannot {nameof(Start)}, because it has already started.");
+
+        _isCharging = true;
+    }
+
+    /// <summary>
+    /// returns the percentage of the amount charged.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
+    public float Charge(float deltaTime)
+    {
+        if (!_isCharging)
+            throw new InvalidOperationException($"Cannot {nameof(Charge)}, because it hasnt started yet.");
+
+        _chargeTime.Tick(deltaTime);
+        float percentageCharged = _chargeTime.GetCompletedFactor() * 100.0f;
+        return percentageCharged;
+    }
+
+    /// <summary>
+    /// returns the resulting jump force, based of charge.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
+    public float End()
+    {
+        if (!_isCharging)
+            throw new InvalidOperationException($"Cannot {nameof(End)}, because it hasnt started yet.");
+
+        float additionalStrength = CalculateAdditionalStrength();
+        float calculatedStrength = _stats.InitialStrength + additionalStrength;
+
+        _chargeTime.ResetTime();
+        _isCharging = false;
+
+        return calculatedStrength;
     }
 }
