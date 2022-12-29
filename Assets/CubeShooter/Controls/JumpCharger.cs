@@ -1,10 +1,9 @@
 using RibynsModules.GameLogger;
 using RibynsModules.GameTimer;
 using System;
-using UnityEngine;
 using UnityEngine.Assertions;
 
-public sealed class JumpCalculator 
+public sealed class JumpCharger 
 {
     readonly JumpStats _stats = null;
     readonly GameTimer _chargeTime = null;
@@ -13,7 +12,7 @@ public sealed class JumpCalculator
     bool _isCharging = false;
     public bool IsCharging { get => _isCharging; }
 
-    public JumpCalculator(JumpStats stats)
+    public JumpCharger(JumpStats stats)
     {
         Assert.IsNotNull(stats, $"{nameof(stats)} may not be null");
 
