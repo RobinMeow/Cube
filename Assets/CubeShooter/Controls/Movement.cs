@@ -111,11 +111,12 @@ public sealed class Movement : MonoBehaviour
                 _audioSource.PlayOneShot(_jumpClip);
             }
         }
-        else if (isChargingJump && _rigidbody.useGravity)
+        else if (isChargingJump)
         {
             // disable gravity 
             _rigidbody.useGravity = false;
             _rigidbody.velocity = Vector3.zero;
+            SetHoldJumpTextPosition();
         }
         else if (!isChargingJump && !_rigidbody.useGravity)
         {
@@ -127,8 +128,6 @@ public sealed class Movement : MonoBehaviour
         }
 
         _rigidbody.AddForce(movementForce, ForceMode.Force);
-
-        SetHoldJumpTextPosition();
     }
 
     bool ChargedJumpFeedbackThresholdReached(float calculatedJumpStrength)

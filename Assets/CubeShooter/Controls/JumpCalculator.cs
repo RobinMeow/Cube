@@ -51,6 +51,7 @@ public sealed class JumpCalculator
         }
         else if (hasReleasedJumpButton() && _isCharging) 
         {
+            _chargeTime.Tick(Time.deltaTime);
             float additionalStrength = CalculateAdditionalStrength();
             calculatedStrength = _stats.InitialStrength + additionalStrength;
             percentageComplete = _chargeTime.GetCompletedFactor() * 100.0f;
