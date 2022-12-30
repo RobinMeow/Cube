@@ -45,10 +45,11 @@ public sealed class Movement : MonoBehaviour
 
     // Movement 
     JumpCharger _jumpCharger = null;
+    public void SetInput(BaseInputs meow) => _inputs = meow;
 
     void Awake()
     {
-        Assert.IsNotNull(_inputs, $"{nameof(Movement)} requires {nameof(_inputs)}.");
+        //Assert.IsNotNull(_inputs, $"{nameof(Movement)} requires {nameof(_inputs)}.");
         Assert.IsNotNull(_rigidbody, $"{nameof(Movement)} requires {nameof(_rigidbody)}.");
         Assert.IsNotNull(_stats, $"{nameof(Movement)} requires {nameof(_stats)}.");
         Assert.IsNotNull(_jumpStats, $"{nameof(Movement)} requires {nameof(_jumpStats)}.");

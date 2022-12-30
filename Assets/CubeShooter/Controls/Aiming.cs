@@ -10,6 +10,8 @@ public sealed class Aiming : MonoBehaviour
     public static Vector2 DefaultDirection => Vector2.up;
 
     [SerializeField] BaseInputs _inputs = null;
+    public void SetInput(BaseInputs meow) => _inputs = meow;
+
     [SerializeField] Rotator _orbitingCubes = null;
     [SerializeField] FloatReference _maxShotChargeDuration = new FloatReference(1.0f);
     [SerializeField] ProjectilePool _projectilePool = null;
@@ -22,9 +24,8 @@ public sealed class Aiming : MonoBehaviour
 
     void Awake()
     {
-        Assert.IsNotNull(_inputs, $"{nameof(_inputs)} may not be null.");
+        //Assert.IsNotNull(_inputs, $"{nameof(_inputs)} may not be null.");
         Assert.IsNotNull(_orbitingCubes, $"{nameof(_orbitingCubes)} may not be null.");
-        Assert.IsNotNull(_inputs, $"{nameof(_inputs)} may not be null.");
         Assert.IsNotNull(_projectilePool, $"{nameof(_projectilePool)} may not be null.");
         Assert.IsNotNull(_projectileStats, $"{nameof(_projectileStats)} may not be null.");
         _chargeTimer = new GameTimer(0.0f, _maxShotChargeDuration);
