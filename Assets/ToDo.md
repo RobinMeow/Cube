@@ -20,3 +20,5 @@
 - when a cube falls of the map, a timer the cube has to get back up 
 - a bullet type, that disables jump for a short duration 
 - Add size decreasing short range Plane Projectile which pushes only 
+
+- Revert the change, where i put the UserInput into the CubeShooterNetwork. And Spawn the CubeShooter from code. 

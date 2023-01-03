@@ -3,17 +3,20 @@ using RibynsModules;
 using System;
 using System.Collections;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
 
-public sealed class Movement : MonoBehaviour
+public sealed class MovementNetwork : NetworkBehaviour
 {
     [SerializeField] BaseInputs _inputs = null;
     [SerializeField] Rigidbody _rigidbody = null;
     [SerializeField] CubeShooterStats _stats = null;
     [SerializeField] JumpStats _jumpStats = null;
     [SerializeField] BoxCollider _boxCollider = null;
+    [SerializeField] NetworkObject _networkObject = null;
+    [SerializeField] NetworkPosition _networkPosition = null;
 
     [SerializeField] MeshRenderer _meshRenderer = null;
     [SerializeField] RectTransform _holdJumpPercentageRectTransform = null;
@@ -49,20 +52,22 @@ public sealed class Movement : MonoBehaviour
     void Awake()
     {
         //Assert.IsNotNull(_inputs, $"{nameof(Movement)} requires {nameof(_inputs)}.");
-        Assert.IsNotNull(_rigidbody, $"{nameof(Movement)} requires {nameof(_rigidbody)}.");
-        Assert.IsNotNull(_stats, $"{nameof(Movement)} requires {nameof(_stats)}.");
-        Assert.IsNotNull(_jumpStats, $"{nameof(Movement)} requires {nameof(_jumpStats)}.");
-        Assert.IsNotNull(_boxCollider, $"{nameof(Movement)} requires {nameof(_boxCollider)}.");
+        Assert.IsNotNull(_rigidbody, $"{nameof(MovementNetwork)} requires {nameof(_rigidbody)}.");
+        Assert.IsNotNull(_stats, $"{nameof(MovementNetwork)} requires {nameof(_stats)}.");
+        Assert.IsNotNull(_jumpStats, $"{nameof(MovementNetwork)} requires {nameof(_jumpStats)}.");
+        Assert.IsNotNull(_boxCollider, $"{nameof(MovementNetwork)} requires {nameof(_boxCollider)}.");
 
-        Assert.IsNotNull(_tmProJumpChargePercentage, $"{nameof(Movement)} requires {nameof(_tmProJumpChargePercentage)}.");
-        Assert.IsNotNull(_holdJumpPercentageRectTransform, $"{nameof(Movement)} requires {nameof(_holdJumpPercentageRectTransform)}.");
-        Assert.IsNotNull(_audioSource, $"{nameof(Movement)} requires {nameof(_audioSource)}.");
-        Assert.IsNotNull(_groundDropClip, $"{nameof(Movement)} requires {nameof(_groundDropClip)}.");
-        Assert.IsNotNull(_chargedJumpClip, $"{nameof(Movement)} requires {nameof(_chargedJumpClip)}.");
-        Assert.IsNotNull(_jumpClip, $"{nameof(Movement)} requires {nameof(_chargedJumpClip)}.");
-        Assert.IsNotNull(_groundDropParticles, $"{nameof(Movement)} requires {nameof(_groundDropParticles)}.");
-        Assert.IsNotNull(_chargedJumpParticles, $"{nameof(Movement)} requires {nameof(_chargedJumpParticles)}.");
-        
+        Assert.IsNotNull(_tmProJumpChargePercentage, $"{nameof(MovementNetwork)} requires {nameof(_tmProJumpChargePercentage)}.");
+        Assert.IsNotNull(_holdJumpPercentageRectTransform, $"{nameof(MovementNetwork)} requires {nameof(_holdJumpPercentageRectTransform)}.");
+        Assert.IsNotNull(_audioSource, $"{nameof(MovementNetwork)} requires {nameof(_audioSource)}.");
+        Assert.IsNotNull(_groundDropClip, $"{nameof(MovementNetwork)} requires {nameof(_groundDropClip)}.");
+        Assert.IsNotNull(_chargedJumpClip, $"{nameof(MovementNetwork)} requires {nameof(_chargedJumpClip)}.");
+        Assert.IsNotNull(_jumpClip, $"{nameof(MovementNetwork)} requires {nameof(_chargedJumpClip)}.");
+        Assert.IsNotNull(_groundDropParticles, $"{nameof(MovementNetwork)} requires {nameof(_groundDropParticles)}.");
+        Assert.IsNotNull(_chargedJumpParticles, $"{nameof(MovementNetwork)} requires {nameof(_chargedJumpParticles)}.");
+        Assert.IsNotNull(_networkObject, $"{nameof(_networkObject)} may not be null.");
+        Assert.IsNotNull(_networkPosition, $"{nameof(_networkPosition)} may not be null.");
+
         _jumpCharger = new JumpCharger(_jumpStats);
         _tmProJumpChargePercentage.color = _meshRenderer.material.color;
     }
@@ -70,17 +75,21 @@ public sealed class Movement : MonoBehaviour
     void FixedUpdate()
     {
         _hasGroundHit = CastGroundCheck();
-        
+
         if (_hasGroundHit)
             Debug.DrawRay(_groundHit.point, _groundHit.normal, Color.green, 0.1f);
-        
+
         if (_hasGroundHit && !_hadGroundHitPreviousFrame)
         {
             PlayGroundDropFeedback();
         }
 
-        RaiseJumpInputEvents();
-        RaiseMoveEvents();
+        if (_networkObject.IsOwner())
+        {
+            RaiseJumpInputEvents();
+            RaiseMoveEvents();
+            _networkPosition.Refresh(transform.position);
+        }
 
         _hadGroundHitPreviousFrame = _hasGroundHit;
     }
@@ -177,7 +186,7 @@ public sealed class Movement : MonoBehaviour
             ParticleSystem particleSystem = _chargedJumpParticles.Get<ParticleSystem>();
             particleSystem.transform.parent = transform;
             particleSystem.transform.SetPositionAndRotation(transform.position + _chargedJumpParticlePositionOffset, Quaternion.identity);
-            
+
             particleSystem.Play();
             _audioSource.PlayOneShot(_chargedJumpClip);
 
@@ -202,9 +211,9 @@ public sealed class Movement : MonoBehaviour
 
             particleSystem.Play();
             _audioSource.PlayOneShot(_groundDropClip);
-            
+
             yield return new WaitForSeconds(particleSystem.main.duration);
-                
+
             _groundDropParticles.Return(particleSystem);
         }
     }
@@ -251,5 +260,22 @@ public sealed class Movement : MonoBehaviour
 
         Gizmos.matrix = prevMatrix;
         Gizmos.color = prevColor;
+    }
+}
+
+public static class NetworkBehaviorExtensions
+{
+    public static NetworkManager GetNetworkManager(this NetworkBehaviour _)
+        => NetworkManager.Singleton;
+
+    //public static bool IsOwner(this NetworkBehaviour networkBehaviour)
+    //{
+    //    return networkBehaviour.NetworkObject.IsOwner();
+    //}
+
+    public static bool IsOwner(this NetworkObject networkObject)
+    {
+        ulong ownerClientId = networkObject.OwnerClientId;
+        return ownerClientId == NetworkManager.Singleton.LocalClientId;
     }
 }

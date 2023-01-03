@@ -1,3 +1,4 @@
+using RibynsModules;
 using RibynsModules.GameLogger;
 using Unity.Netcode;
 using UnityEngine;
