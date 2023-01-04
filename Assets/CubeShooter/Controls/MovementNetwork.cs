@@ -88,7 +88,7 @@ public sealed class MovementNetwork : NetworkBehaviour
         {
             RaiseJumpInputEvents();
             RaiseMoveEvents();
-            _networkPosition.Refresh(transform.position);
+            _networkPosition.RefreshPosition(transform.position);
         }
 
         _hadGroundHitPreviousFrame = _hasGroundHit;
