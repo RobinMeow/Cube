@@ -3,6 +3,7 @@ using RibynsModules.GameLogger;
 using Unity.Netcode;
 using UnityEngine;
 
+[System.Obsolete("use LobbyJoin.cs instead.")]
 public class NetworkSessionJoin : MonoBehaviour
 {
     [SerializeField] NetworkManager _networkManager = null;

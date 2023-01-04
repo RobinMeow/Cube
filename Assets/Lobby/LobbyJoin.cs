@@ -24,7 +24,7 @@ public sealed class LobbyJoin : MonoBehaviour
         }
         
         _networkManager.StartHost();
-        _userInterface.SetActive(false);
+        _userInterface.SetActive(false); 
     }
     
     public void OnClientClick()
