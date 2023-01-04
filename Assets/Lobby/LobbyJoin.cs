@@ -4,11 +4,40 @@ using UnityEngine.Assertions;
 
 public sealed class LobbyJoin : MonoBehaviour
 {
+    [SerializeField] NetworkManager _networkManager;
+    [SerializeField] GameObject _userInterface;
     [SerializeField] TMPro.TMP_InputField _ifUsername;
     
     void Awake() 
     {
         Assert.IsNotNull(_ifUsername, $"{nameof(_ifUsername)} may not be null.");
+        Assert.IsNotNull(_userInterface, $"{nameof(_userInterface)} may not be null.");
+    }
+    
+    public void OnHostClick()
+    {
+        string userInput = _ifUsername.text;
+        if (IsInvalidUsername(userInput, out string errorMessage))
+        {
+            _ifUsername.text = errorMessage;
+            return;
+        }
+        
+        _networkManager.StartHost();
+        _userInterface.SetActive(false);
+    }
+    
+    public void OnClientClick()
+    {
+        string userInput = _ifUsername.text;
+        if (IsInvalidUsername(userInput, out string errorMessage))
+        {
+            _ifUsername.text = errorMessage;
+            return;
+        }
+        
+        _networkManager.StartClient();
+        _userInterface.SetActive(false);
     }
     
     static bool IsInvalidUsername(string username, out string errorMessage)
@@ -23,29 +52,5 @@ public sealed class LobbyJoin : MonoBehaviour
             errorMessage = "Username too long";
             
         return !string.IsNullOrWhiteSpace(errorMessage);
-    }
-    
-    public void OnHostClick()
-    {
-        string userInput = _ifUsername.text;
-        if (IsInvalidUsername(userInput, out string errorMessage))
-        {
-            _ifUsername.text = errorMessage;
-            return;
-        }
-        
-        NetworkManager.Singleton.StartHost();
-    }
-    
-    public void OnClientClick()
-    {
-        string userInput = _ifUsername.text;
-        if (IsInvalidUsername(userInput, out string errorMessage))
-        {
-            _ifUsername.text = errorMessage;
-            return;
-        }
-        
-        NetworkManager.Singleton.StartClient();
     }
 }
