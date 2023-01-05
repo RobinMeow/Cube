@@ -19,8 +19,7 @@ public sealed class LobbyJoin : NetworkBehaviour
     
     void Start()
     {
-        // if (IsServer)
-        //     _networkManager.OnClientConnectedCallback += OnClientConnected;
+        _networkManager.OnClientConnectedCallback += OnClientConnected;
     }
     
     public void OnHostClick()
@@ -34,7 +33,6 @@ public sealed class LobbyJoin : NetworkBehaviour
         
         _userInterface.SetActive(false);
         _networkManager.StartHost();
-        SpawnCubeShooterServerRpc(); // Host does not count as client, apperently.
     }
     
     public void OnClientClick()
@@ -46,33 +44,18 @@ public sealed class LobbyJoin : NetworkBehaviour
             return;
         }
         
+        _networkManager.OnClientConnectedCallback -= OnClientConnected; // only the host needs it
         _userInterface.SetActive(false);
         _networkManager.StartClient();
-        StartCoroutine(RequestCubeShooterSpawn());
-        // SpawnCubeShooterServerRpc(); // Host does not count as client, apperently.
-    }
-
-    System.Collections.IEnumerator RequestCubeShooterSpawn()
-    {
-        yield return new WaitForSeconds(3.0f);
-        SpawnCubeShooterServerRpc();
     }
 
     void OnClientConnected(ulong clientId) 
     {
-        SpawnCubeShooterServerRpc();
-    }
-    
-    [ServerRpc(Delivery = RpcDelivery.Reliable, RequireOwnership = false)]
-    void SpawnCubeShooterServerRpc(ServerRpcParams para = default)
-    {
-        ulong senderClientId = para.Receive.SenderClientId;
-        Debug.Log("SpawnCubeShooterServerRpc Raised");
+        Debug.Log("OnClientConnected called on " + OwnerClientId);
         GameObject gameObject = Instantiate(_cubePrefab, Vector3.zero, Quaternion.identity);
-        gameObject.name = $"{_ifUsername.text} (CubeShooter)";
+        gameObject.name = $"{clientId} (CubeShooter)";
         NetworkObject networkObject = gameObject.GetComponent<NetworkObject>();
-        networkObject.SpawnWithOwnership(senderClientId, destroyWithScene: true); 
-        // position is handled via RuntimeSet and CubeSpawner somehow, cant remember. But pretty cool.
+        networkObject.SpawnWithOwnership(clientId, destroyWithScene: true); // ToDo: check if default is server
     }
     
     static bool IsInvalidUsername(string username, out string errorMessage)
@@ -87,11 +70,5 @@ public sealed class LobbyJoin : NetworkBehaviour
             errorMessage = "Username too long";
             
         return !string.IsNullOrWhiteSpace(errorMessage);
-    }
-    
-    public override void OnDestroy() 
-    {
-        // _networkManager.OnClientConnectedCallback -= OnClientConnected;
-        base.OnDestroy();
     }
 }
