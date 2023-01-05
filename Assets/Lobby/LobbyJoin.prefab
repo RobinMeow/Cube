@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2602686223692332754}
   - component: {fileID: 2602686223692332755}
+  - component: {fileID: 653167584847200967}
   m_Layer: 5
   m_Name: LobbyJoin
   m_TagString: Untagged
@@ -49,5 +50,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9049be4fe0689c44abf5b242586c63d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _userInterface: {fileID: 0}
+  _networkManager: {fileID: 0}
   _ifUsername: {fileID: 0}
+  _userInterface: {fileID: 0}
+  _cubePrefab: {fileID: 4408542338449048009, guid: b68a1fbf31809244fb59847094e76bba, type: 3}
+--- !u!114 &653167584847200967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2602686223692332757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
